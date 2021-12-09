@@ -787,10 +787,10 @@ public class DeGaatGoed {
         beginFrame.setResizable(false);
 
 
-//            JPanel mainpanel = new JPanel();
-//            mainpanel.setBounds(0,0,700,400);
-//            mainpanel.setBackground(new Color(94,163,226));
-//            frame.add(mainpanel);
+            JPanel mainpanel = new JPanel();
+            mainpanel.setBounds(0,0,700,400);
+            mainpanel.setBackground(new Color(94,163,226));
+            beginFrame.add(mainpanel);
 
 
 
