@@ -25,7 +25,7 @@ public class DeGaatGoed {
     int opgeslagenWaterGebruikPerMaand;
     int opgeslagenWaterGebruikVandaag;
     double opgeslagenWaterGebruikPerUur;
-    String naam = "";
+    String naam = "i";
     String wachtwoord = "";
     String adres = "";
     String stad = "";
