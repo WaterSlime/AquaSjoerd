@@ -146,9 +146,9 @@ public class DeGaatGoed {
                     Border border = BorderFactory.createLineBorder(Color.BLACK);
                     //   JOptionPane.showMessageDialog(null, "Welkom op het Hoofdscherm!");
 
-                    ImageIcon image = new ImageIcon("C:\\Users\\jacoc\\Dekstop\\goed\\Afbeelding1.png");
+
                     JLabel plaatje = new JLabel();
-                    image = new ImageIcon(this.getClass().getResource("AquaSjoerd/Afbeelding1.png"));
+                    ImageIcon image = new ImageIcon(this.getClass().getResource("Afbeelding1.png"));
                     plaatje = new JLabel(image);
                     plaatje.setBounds(0, 0, 600, 410);
 
@@ -243,9 +243,9 @@ public class DeGaatGoed {
                 if (!naam.equals("")) {
                     Border border = BorderFactory.createLineBorder(Color.BLACK);
 
-                    ImageIcon image = new ImageIcon("C:\\Users\\jacoc\\Dekstop\\goed\\Afbeelding1.png");
+
                     JLabel plaatje = new JLabel();
-                    image = new ImageIcon(this.getClass().getResource("AquaSjoerd/Afbeelding1.png"));
+                     ImageIcon image = new ImageIcon(this.getClass().getResource("Afbeelding1.png"));
                     plaatje = new JLabel(image);
                     plaatje.setBounds(100, 0, 600, 410);
 
@@ -347,9 +347,9 @@ public class DeGaatGoed {
             public void actionPerformed(ActionEvent e) {
                 if (!naam.equals("")){
                     Border border = BorderFactory.createLineBorder(Color.black, 1);
-                    ImageIcon image = new ImageIcon("C:\\Users\\jacoc\\Dekstop\\goed\\Afbeelding1.png");
+
                     JLabel plaatje = new JLabel();
-                    image = new ImageIcon(this.getClass().getResource("AquaSjoerd/Afbeelding1.png"));
+                     ImageIcon image = new ImageIcon(this.getClass().getResource("Afbeelding1.png"));
                     plaatje = new JLabel(image);
                     plaatje.setBounds(0, 0, 600, 410);
 
@@ -477,9 +477,9 @@ public class DeGaatGoed {
             public void actionPerformed(ActionEvent e) {
                 if (!naam.equals("")) {
                     Border border = BorderFactory.createLineBorder(Color.black, 1);
-                    ImageIcon image = new ImageIcon("C:\\Users\\jacoc\\Dekstop\\goed\\Afbeelding1.png");
+
                     JLabel plaatje = new JLabel();
-                    image = new ImageIcon(this.getClass().getResource("AquaSjoerd/Afbeelding1.png"));
+                     ImageIcon image = new ImageIcon(this.getClass().getResource("Afbeelding1.png"));
                     plaatje = new JLabel(image);
                     plaatje.setBounds(0, 0, 600, 416);
 
