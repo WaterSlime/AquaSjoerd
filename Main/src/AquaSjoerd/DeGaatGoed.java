@@ -45,7 +45,8 @@ public class DeGaatGoed {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!naam.equals("")) {
-                    ImageIcon image = new ImageIcon("C:\\Users\\jacoc\\Dekstop\\goed\\Afbeelding1.png");
+                    //ImageIcon image = new ImageIcon("C:\\Users\\jacoc\\Dekstop\\goed\\Afbeelding1.png");
+                    ImageIcon image = new ImageIcon("..\\..\\..\\resources\\Afbeelding1.png");
                     JLabel plaatje = new JLabel();
                     image = new ImageIcon(this.getClass().getResource("Afbeelding1.png"));
 
