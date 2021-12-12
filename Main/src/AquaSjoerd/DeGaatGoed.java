@@ -5,10 +5,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.PrintWriter;
+import java.sql.*;
 import java.util.Scanner;
 import javax.swing.BorderFactory;
 import javax.swing.border.Border;
 import javax.swing.ImageIcon;
+import javax.swing.plaf.ColorUIResource;
 import java.net.URL;
 public class DeGaatGoed {
     private JButton instellingenButton;
@@ -20,7 +23,7 @@ public class DeGaatGoed {
     private JButton inlogButton;
     private JLabel tekst;
     int waterGebruikMaand = 283;
-    int waterGebruikVandaag= 12;
+    int waterGebruikVandaag = 12;
     double waterGebruikPerUur = 0.76;
     int opgeslagenWaterGebruikPerMaand;
     int opgeslagenWaterGebruikVandaag;
@@ -45,7 +48,7 @@ public class DeGaatGoed {
                 if (!naam.equals("")) {
 
                     JLabel plaatje = new JLabel();
-                     ImageIcon image = new ImageIcon(this.getClass().getResource("Afbeelding1.png"));
+                    ImageIcon image = new ImageIcon(this.getClass().getResource("Afbeelding1.png"));
 
                     plaatje = new JLabel(image);
                     plaatje.setBounds(0, 0, 600, 410);
@@ -57,14 +60,14 @@ public class DeGaatGoed {
                     kopnaam.setText("AquaSjoerd");
                     kopnaam.setFont(new Font("Arial", Font.PLAIN, 20));
                     kopnaam.setHorizontalAlignment(JLabel.CENTER);
-                    koppanel.setBackground(new Color(94,163,226));
+                    koppanel.setBackground(new Color(94, 163, 226));
                     koppanel.add(kopnaam);
                     koppanel.setBounds(75, 0, 650, 50);
                     koppanel.setBorder(border);
 
                     JPanel statistieken = new JPanel();
                     statistieken.setBounds(0, 0, 75, 50);
-                    statistieken.setBackground(new Color(94,163,226));
+                    statistieken.setBackground(new Color(94, 163, 226));
                     JLabel tab = new JLabel();
                     tab.setText("Statistieken");
                     tab.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -96,7 +99,7 @@ public class DeGaatGoed {
                     textVak.add(verbruik);
                     textVak.add(waterGebruiktVandaag);
                     textVak.add(verbuikPerUur);
-                    textVak.setBackground(new Color(94,163,226));
+                    textVak.setBackground(new Color(94, 163, 226));
 
                     JLabel inhoud = new JLabel();
                     inhoud.setText("Water over in de tank ");
@@ -115,7 +118,7 @@ public class DeGaatGoed {
                     inhoudOver.setBounds(550, 50, 150, 350);
                     inhoudOver.add(inhoud);
                     inhoudOver.add(waarde);
-                    inhoudOver.setBackground(new Color(94,163,226));
+                    inhoudOver.setBackground(new Color(94, 163, 226));
 
                     //   JOptionPane.showMessageDialog(null, "Welkom op het Statistiekenscherm!");
 //            JFrame frameStatistieken = new JFrame();
@@ -130,8 +133,7 @@ public class DeGaatGoed {
                     frameStatistieken.add(textVak);
                     frameStatistieken.add(inhoudOver);
                     frameStatistieken.add(plaatje);
-                }
-                else {
+                } else {
                     JOptionPane.showMessageDialog(null, "Registreer u eerst voor het gebruik");
                 }
             }
@@ -148,7 +150,7 @@ public class DeGaatGoed {
 
 
                     JLabel plaatje = new JLabel();
-                     ImageIcon image = new ImageIcon(this.getClass().getResource("Afbeelding1.png"));
+                    ImageIcon image = new ImageIcon(this.getClass().getResource("Afbeelding1.png"));
                     plaatje = new JLabel(image);
                     plaatje.setBounds(0, 0, 600, 410);
 
@@ -160,7 +162,7 @@ public class DeGaatGoed {
                     JPanel hoofd = new JPanel();
                     hoofd.setBounds(0, 0, 90, 50);
                     hoofd.setBorder(border);
-                    hoofd.setBackground(new Color(94,163,226));
+                    hoofd.setBackground(new Color(94, 163, 226));
                     hoofd.add(hoofdScherm);
 
 
@@ -172,7 +174,7 @@ public class DeGaatGoed {
                     JPanel kopNaam = new JPanel();
                     kopNaam.setBounds(90, 0, 610, 50);
                     kopNaam.setBorder(border);
-                    kopNaam.setBackground(new Color(94,163,226));
+                    kopNaam.setBackground(new Color(94, 163, 226));
                     kopNaam.add(kopje);
 
                     JLabel nieuwsEnInfo = new JLabel();
@@ -183,14 +185,14 @@ public class DeGaatGoed {
                     JPanel nieuwsEnInfoVak = new JPanel();
                     nieuwsEnInfoVak.setBounds(100, 200, 350, 20);
                     nieuwsEnInfoVak.setBorder(border);
-                    nieuwsEnInfoVak.setBackground(new Color(94,163,226));
+                    nieuwsEnInfoVak.setBackground(new Color(94, 163, 226));
                     nieuwsEnInfoVak.add(nieuwsEnInfo);
 
 
                     JPanel info = new JPanel();
                     info.setBounds(100, 200, 350, 80);
                     info.setBorder(border);
-                    info.setBackground(new Color(94,163,226));
+                    info.setBackground(new Color(94, 163, 226));
 
 
                     JLabel naamKopje = new JLabel();
@@ -201,7 +203,7 @@ public class DeGaatGoed {
                     JPanel statistiekenKopje = new JPanel();
                     statistiekenKopje.setBounds(600, 50, 100, 20);
                     statistiekenKopje.setBorder(border);
-                    statistiekenKopje.setBackground(new Color(94,163,226));
+                    statistiekenKopje.setBackground(new Color(94, 163, 226));
                     statistiekenKopje.add(naamKopje);
 
                     JLabel statistiekenTekst = new JLabel();
@@ -212,7 +214,7 @@ public class DeGaatGoed {
                     JPanel statistiekenInfo = new JPanel();
                     statistiekenInfo.setBounds(600, 70, 100, 330);
                     statistiekenInfo.setBorder(border);
-                    statistiekenInfo.setBackground(new Color(94,163,226));
+                    statistiekenInfo.setBackground(new Color(94, 163, 226));
                     statistiekenInfo.add(statistiekenTekst);
 
                     JFrame frame = new JFrame();
@@ -229,8 +231,7 @@ public class DeGaatGoed {
                     frame.add(statistiekenKopje);
                     frame.add(statistiekenInfo);
                     frame.add(plaatje);
-                }
-                else {
+                } else {
                     JOptionPane.showMessageDialog(null, "Registreer u eerst voor het gebruik");
                 }
             }
@@ -245,7 +246,7 @@ public class DeGaatGoed {
 
 
                     JLabel plaatje = new JLabel();
-                     ImageIcon image = new ImageIcon(this.getClass().getResource("Afbeelding1.png"));
+                    ImageIcon image = new ImageIcon(this.getClass().getResource("Afbeelding1.png"));
                     plaatje = new JLabel(image);
                     plaatje.setBounds(100, 0, 600, 410);
 
@@ -295,7 +296,7 @@ public class DeGaatGoed {
                     JPanel hoofd = new JPanel();
                     hoofd.setBounds(0, 50, 200, 400);
                     hoofd.setBorder(border);
-                    hoofd.setBackground(new Color(94,163,226));
+                    hoofd.setBackground(new Color(94, 163, 226));
                     hoofd.add(slaStatistiekenOp);
                     hoofd.add(opvragenPG);
                     hoofd.add(resetStats);
@@ -308,7 +309,7 @@ public class DeGaatGoed {
                     JPanel instellingen = new JPanel();
                     instellingen.setBounds(0, 0, 90, 50);
                     instellingen.setBorder(border);
-                    instellingen.setBackground(new Color(94,163,226));
+                    instellingen.setBackground(new Color(94, 163, 226));
                     instellingen.add(instellingenNaam);
 
 
@@ -320,7 +321,7 @@ public class DeGaatGoed {
                     JPanel kop = new JPanel();
                     kop.setBounds(90, 0, 610, 50);
                     kop.setBorder(border);
-                    kop.setBackground(new Color(94,163,226));
+                    kop.setBackground(new Color(94, 163, 226));
                     kop.add((kopNaam));
 
 
@@ -335,8 +336,7 @@ public class DeGaatGoed {
                     frame.add(instellingen);
                     frame.add(hoofd);
                     frame.add(plaatje);
-                }
-                else {
+                } else {
                     JOptionPane.showMessageDialog(null, "Registreer u eerst voor het gebruik");
                 }
 
@@ -345,11 +345,11 @@ public class DeGaatGoed {
         abonnementButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!naam.equals("")){
+                if (!naam.equals("")) {
                     Border border = BorderFactory.createLineBorder(Color.black, 1);
 
                     JLabel plaatje = new JLabel();
-                     ImageIcon image = new ImageIcon(this.getClass().getResource("Afbeelding1.png"));
+                    ImageIcon image = new ImageIcon(this.getClass().getResource("Afbeelding1.png"));
                     plaatje = new JLabel(image);
                     plaatje.setBounds(0, 0, 600, 410);
 
@@ -364,10 +364,9 @@ public class DeGaatGoed {
 
                             Border border = BorderFactory.createLineBorder(Color.BLACK);
 
-                            String [] maandenLijst = {"1","2","3","4","5","6","7","8","9","10","11","12"};
+                            String[] maandenLijst = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"};
 
                             JComboBox lijst = new JComboBox(maandenLijst);
-
 
 
 //                        JButton maanden12Knop = new JButton();
@@ -389,7 +388,7 @@ public class DeGaatGoed {
 //                        maanden3Knop.setText("3 maanden");
 
                             JPanel maanden3 = new JPanel();
-                            maanden3.setBounds(0,50,100,100);
+                            maanden3.setBounds(0, 50, 100, 100);
 //                        maanden3.add(maanden3Knop);
                             maanden3.add(lijst);
 //                        JButton knop = new JButton();
@@ -398,7 +397,7 @@ public class DeGaatGoed {
                             submitKnop.setText("Submit");
 
                             JPanel submitButtonPanel = new JPanel();
-                            submitButtonPanel.setBounds(150,50,75,50);
+                            submitButtonPanel.setBounds(150, 50, 75, 50);
                             submitButtonPanel.add(submitKnop);
 
 
@@ -410,7 +409,6 @@ public class DeGaatGoed {
 //                        JTextField antwoord = new JTextField();
 //                        antwoord.setPreferredSize(new Dimension(250, 25));
 //                        String aantal = antwoord.getText();
-
 
 
                             JPanel antwoordje = new JPanel();
@@ -442,7 +440,7 @@ public class DeGaatGoed {
                             submitKnop.addActionListener(new ActionListener() {
                                 @Override
                                 public void actionPerformed(ActionEvent e) {
-                                    JOptionPane.showMessageDialog(null,"Uw verzoek tot verlenging is verstuurd!");
+                                    JOptionPane.showMessageDialog(null, "Uw verzoek tot verlenging is verstuurd!");
                                     frame.setVisible(false);
                                 }
                             });
@@ -491,7 +489,7 @@ public class DeGaatGoed {
                     JPanel verlengen = new JPanel();
                     verlengen.setBorder(border);
                     verlengen.setBounds(600, 50, 100, 350);
-                    verlengen.setBackground(new Color(94,163,226));
+                    verlengen.setBackground(new Color(94, 163, 226));
                     verlengen.add(knop);
 
                     JPanel panel1 = new JPanel();
@@ -500,8 +498,8 @@ public class DeGaatGoed {
 
                     abonnementen.setFont(new Font("Arial", Font.PLAIN, 14));
 
-                    abonnementen.setBackground(new Color(94,163,226));
-                    panel1.setBackground(new Color(94,163,226));
+                    abonnementen.setBackground(new Color(94, 163, 226));
+                    panel1.setBackground(new Color(94, 163, 226));
                     panel1.setBounds(100, 100, 210, 200);
                     panel1.add(abonnementen);
                     panel1.setBorder(border);
@@ -513,8 +511,8 @@ public class DeGaatGoed {
                     AquaSjoerd.setFont(new Font("Arial", Font.PLAIN, 20));
 
                     AquaSjoerd.setOpaque(true);
-                    AquaSjoerd.setBackground(new Color(94,163,226));
-                    panel2.setBackground(new Color(94,163,226));
+                    AquaSjoerd.setBackground(new Color(94, 163, 226));
+                    panel2.setBackground(new Color(94, 163, 226));
                     panel2.setBounds(110, 0, 590, 50);
                     panel2.add(AquaSjoerd);
                     panel2.setBorder(border);
@@ -524,8 +522,8 @@ public class DeGaatGoed {
                     plaats.setFont(new Font("Arial", Font.PLAIN, 14));
                     JPanel panel3 = new JPanel();
                     plaats.setOpaque(true);
-                    plaats.setBackground(new Color(94,163,226));
-                    panel3.setBackground(new Color(94,163,226));
+                    plaats.setBackground(new Color(94, 163, 226));
+                    panel3.setBackground(new Color(94, 163, 226));
                     panel3.setBounds(0, 0, 110, 50);
                     panel3.add(plaats);
                     panel3.setBorder(border);
@@ -543,8 +541,7 @@ public class DeGaatGoed {
                     frame.add(panel3);
                     frame.add(plaatje);
                     frame.add(verlengen);
-                }
-                else {
+                } else {
                     JOptionPane.showMessageDialog(null, "Registreer u eerst voor het gebruik");
                 }
             }
@@ -556,7 +553,7 @@ public class DeGaatGoed {
                     Border border = BorderFactory.createLineBorder(Color.black, 1);
 
                     JLabel plaatje = new JLabel();
-                     ImageIcon image = new ImageIcon(this.getClass().getResource("Afbeelding1.png"));
+                    ImageIcon image = new ImageIcon(this.getClass().getResource("Afbeelding1.png"));
                     plaatje = new JLabel(image);
                     plaatje.setBounds(0, 0, 600, 416);
 
@@ -594,7 +591,7 @@ public class DeGaatGoed {
 
                     JPanel contact = new JPanel();
                     contact.setBounds(600, 50, 100, 350);
-                    contact.setBackground(new Color(94,163,226));
+                    contact.setBackground(new Color(94, 163, 226));
                     contact.setBorder(border);
                     contact.add(contactInfo);
 
@@ -606,7 +603,7 @@ public class DeGaatGoed {
                     JPanel type = new JPanel();
                     type.setBounds(0, 0, 150, 50);
                     type.setBorder(border);
-                    type.setBackground(new Color(94,163,226));
+                    type.setBackground(new Color(94, 163, 226));
                     type.add(typeNaam);
 
                     JLabel kopNaam = new JLabel();
@@ -616,10 +613,8 @@ public class DeGaatGoed {
                     JPanel kop = new JPanel();
                     kop.setBounds(150, 0, 550, 50);
                     kop.setBorder(border);
-                    kop.setBackground(new Color(94,163,226));
+                    kop.setBackground(new Color(94, 163, 226));
                     kop.add(kopNaam);
-
-
 
 
                     JFrame frame = new JFrame();
@@ -635,8 +630,7 @@ public class DeGaatGoed {
                     frame.add(gegevens);
                     frame.add(plaatje);
 
-                }
-                else {
+                } else {
                     JOptionPane.showMessageDialog(null, "Registreer u eerst voor het gebruik");
                 }
             }
@@ -649,11 +643,11 @@ public class DeGaatGoed {
                 submitKnop.setText("Submit");
 
                 JPanel submitPanel = new JPanel();
-                submitPanel.setBounds(500, 100,200, 150);
+                submitPanel.setBounds(500, 100, 200, 150);
                 submitPanel.add(submitKnop);
 
-                JTextField invoerStad= new JTextField();
-                invoerStad.setPreferredSize(new Dimension(200,25));
+                JTextField invoerStad = new JTextField();
+                invoerStad.setPreferredSize(new Dimension(200, 25));
 
 
                 JLabel stadLabel = new JLabel();
@@ -661,26 +655,25 @@ public class DeGaatGoed {
                 stadLabel.setFont(new Font("Arial", Font.PLAIN, 12));
 
                 JPanel stadPanel = new JPanel();
-                stadPanel.setBounds(250,150,200,75);
+                stadPanel.setBounds(250, 150, 200, 75);
                 stadPanel.add(stadLabel);
                 stadPanel.add(invoerStad);
 
                 JTextField emailInvoer = new JTextField();
-                emailInvoer.setPreferredSize(new Dimension(200,25));
+                emailInvoer.setPreferredSize(new Dimension(200, 25));
 
 
                 JLabel emailLabel = new JLabel();
                 emailLabel.setText("Voer hier uw emailadres in: ");
-                emailLabel.setFont(new Font("Arial", Font.PLAIN,12));
+                emailLabel.setFont(new Font("Arial", Font.PLAIN, 12));
 
                 JPanel emailPanel = new JPanel();
-                emailPanel.setBounds(0,150,200,75);
+                emailPanel.setBounds(0, 150, 200, 75);
                 emailPanel.add(emailLabel);
                 emailPanel.add(emailInvoer);
 
-                JTextField invoerPostcode= new JTextField();
-                invoerPostcode.setPreferredSize(new Dimension(200,25));
-
+                JTextField invoerPostcode = new JTextField();
+                invoerPostcode.setPreferredSize(new Dimension(200, 25));
 
 
                 JLabel postcodeLabel = new JLabel();
@@ -689,12 +682,12 @@ public class DeGaatGoed {
 
 
                 JPanel postcodePanel = new JPanel();
-                postcodePanel.setBounds(250,75,200,75);
+                postcodePanel.setBounds(250, 75, 200, 75);
                 postcodePanel.add(postcodeLabel);
                 postcodePanel.add(invoerPostcode);
 
                 JTextField adresInvoer = new JTextField();
-                adresInvoer.setPreferredSize(new Dimension(200,25));
+                adresInvoer.setPreferredSize(new Dimension(200, 25));
 
 
                 JLabel adresLabel = new JLabel();
@@ -702,13 +695,12 @@ public class DeGaatGoed {
                 adresLabel.setFont(new Font("Arial", Font.PLAIN, 12));
 
                 JPanel adresPanel = new JPanel();
-                adresPanel.setBounds(250,0,200,75);
+                adresPanel.setBounds(250, 0, 200, 75);
                 adresPanel.add(adresLabel);
                 adresPanel.add(adresInvoer);
 
                 JTextField invoerWachtwoord = new JTextField();
-                invoerWachtwoord.setPreferredSize(new Dimension(200,25));
-
+                invoerWachtwoord.setPreferredSize(new Dimension(200, 25));
 
 
                 JLabel wachtwoordVraag = new JLabel();
@@ -717,13 +709,13 @@ public class DeGaatGoed {
 
 
                 JPanel wachtwoordPanel = new JPanel();
-                wachtwoordPanel.setBounds(0,75,200,50);
+                wachtwoordPanel.setBounds(0, 75, 200, 50);
                 wachtwoordPanel.add(wachtwoordVraag);
                 wachtwoordPanel.add(invoerWachtwoord);
 
                 JTextField invoerNaam = new JTextField();
-                invoerNaam.setPreferredSize(new Dimension(200,25));
-                invoerNaam.setBounds(20,50,200,75);
+                invoerNaam.setPreferredSize(new Dimension(200, 25));
+                invoerNaam.setBounds(20, 50, 200, 75);
 
 //                JPanel textFieldNaam = new JPanel();
 //                textFieldNaam.add(invoerNaam);
@@ -734,14 +726,14 @@ public class DeGaatGoed {
 
 
                 JPanel naamPanel = new JPanel();
-                naamPanel.setBounds(0,0,200,75);
+                naamPanel.setBounds(0, 0, 200, 75);
                 naamPanel.add(vulNaamIn);
                 naamPanel.add(invoerNaam);
 
 
                 JFrame inlogFrame = new JFrame();
                 inlogFrame.setTitle("Registratie");
-                inlogFrame.setSize(700,300);
+                inlogFrame.setSize(700, 300);
                 inlogFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
                 inlogFrame.setResizable(false);
                 inlogFrame.setVisible(true);
@@ -759,11 +751,11 @@ public class DeGaatGoed {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         naam = invoerNaam.getText();
-                        wachtwoord =invoerWachtwoord.getText();
+                        wachtwoord = invoerWachtwoord.getText();
                         adres = adresInvoer.getText();
                         postcode = invoerPostcode.getText();
                         emailadress = emailInvoer.getText();
-                        stad= invoerStad.getText();
+                        stad = invoerStad.getText();
                         JOptionPane.showMessageDialog(null, "Bedankt voor uw registratie " + naam);
                         inlogFrame.show(false);
 
@@ -774,7 +766,7 @@ public class DeGaatGoed {
     }
 
 
-    public static void main (String[] args){
+    public static void main(String[] args) {
 
 
         JFrame beginFrame = new JFrame("AquaSjoerd");
@@ -785,19 +777,17 @@ public class DeGaatGoed {
         beginFrame.setResizable(true);
         beginFrame.setVisible(true);
         beginFrame.setResizable(false);
-
-
-            JPanel mainpanel = new JPanel();
-            mainpanel.setBounds(0,0,700,400);
-            mainpanel.setBackground(new Color(94,163,226));
-            beginFrame.add(mainpanel);
-
-
-
-
     }
-
 }
+//
+//            JPanel mainpanel = new JPanel();
+//            mainpanel.setBounds(0,0,700,400);
+//            mainpanel.setBackground(new Color(94,163,226));
+//            beginFrame.add(mainpanel);
+
+  // connectie mySQL
+
+
 
 
 
