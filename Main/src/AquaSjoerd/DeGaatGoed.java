@@ -1,7 +1,11 @@
 package AquaSjoerd;
 
 import javax.swing.*;
-
+import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.DriverManager;
+import java.sql.Connection;
+import java.sql.Statement;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -40,6 +44,8 @@ public class DeGaatGoed {
 
     public DeGaatGoed() {
 
+
+
         JOptionPane.showMessageDialog(null, "Welkom bij AquaSjoerd! Registreer u eerst voor gebruik van de applicatie.");
 
         statistiekenButton.addActionListener(new ActionListener() {
@@ -74,6 +80,7 @@ public class DeGaatGoed {
                     statistieken.add(tab);
                     tab.setHorizontalAlignment(JLabel.CENTER);
                     statistieken.setBorder(border);
+
 
 
                     JLabel verbuikPerUur = new JLabel();
@@ -758,6 +765,17 @@ public class DeGaatGoed {
                         stad = invoerStad.getText();
                         JOptionPane.showMessageDialog(null, "Bedankt voor uw registratie " + naam);
                         inlogFrame.show(false);
+
+                        try {
+                            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/klantendatabaseaquasjoerd", "root", "Rinnegan999!");
+                            Statement statement = connection.createStatement();
+                            ResultSet resultSet = statement.executeQuery("select * from klantendatabaseaquasjoerd.klant");
+                            statement.executeUpdate("insert into klant values('"+naam +"','" + adres + "','"+ stad + "','" + emailadress + "','"+ wachtwoord + "','" + postcode + "')");
+
+                        }
+                        catch (SQLException a){
+                            JOptionPane.showMessageDialog(null, "Error in de invoer, probeer het nog een keer");
+                        }
 
                     }
                 });
