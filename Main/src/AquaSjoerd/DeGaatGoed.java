@@ -26,11 +26,11 @@ public class DeGaatGoed {
     private JPanel mainpanel;
     private JButton inlogButton;
     private JLabel tekst;
-    int waterGebruikMaand = 283;
-    int waterGebruikVandaag = 12;
-    double waterGebruikPerUur = 0.76;
-    int opgeslagenWaterGebruikPerMaand;
-    int opgeslagenWaterGebruikVandaag;
+    double waterGebruikMaand;
+    double waterGebruikVandaag;
+    double waterGebruikPerUur;
+    double opgeslagenWaterGebruikPerMaand;
+    double opgeslagenWaterGebruikVandaag;
     double opgeslagenWaterGebruikPerUur;
     String naam = "i";
     String wachtwoord = "";
@@ -84,19 +84,65 @@ public class DeGaatGoed {
 
 
                     JLabel verbuikPerUur = new JLabel();
-                    verbuikPerUur.setText("Water per uur verbruikt door druppel irrigatie: " + waterGebruikPerUur + " L");
+                    try {
+
+                        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/irrigatie", "root", "Rinnegan999!");
+                        Statement statement = connection.createStatement();
+                        ResultSet resultSet = statement.executeQuery("SELECT * FROM irrigatie.hoeveelheden;");
+
+                        while (resultSet.next()) {
+
+                            waterGebruikPerUur = (waterGebruikVandaag/24);
+                            String kaas = String.format("%.2f", waterGebruikPerUur);
+                            verbuikPerUur.setText("Water per uur verbruikt door druppel irrigatie: " + kaas + " L");
+
+                        }
+
+                    } catch (SQLException a) {
+                        System.out.println("Error in de database");
+                    }
                     verbuikPerUur.setVerticalAlignment(JLabel.BOTTOM);
                     verbuikPerUur.setHorizontalAlignment(JLabel.LEFT);
                     verbuikPerUur.setFont(new Font("Arial", Font.PLAIN, 13));
 
 
                     JLabel waterGebruiktVandaag = new JLabel();
-                    waterGebruiktVandaag.setText("Water verbruikt aan druppel irrigatie vandaag: " + waterGebruikVandaag + " L");
+                    try {
+
+                        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/irrigatie", "root", "Rinnegan999!");
+                        Statement statement = connection.createStatement();
+                        ResultSet resultSet = statement.executeQuery("SELECT * FROM irrigatie.hoeveelheden;");
+
+                        while (resultSet.next()) {
+                            waterGebruikVandaag = resultSet.getInt("Liters");
+                            waterGebruikVandaag = (waterGebruikVandaag/30);
+                            String kaas = String.format("%.2f", waterGebruikVandaag);
+                            waterGebruiktVandaag.setText("Water verbruikt aan druppel irrigatie vandaag: " + kaas + " L");
+
+                        }
+
+                    } catch (SQLException a) {
+                        System.out.println("Error in de database");
+                    }
                     waterGebruiktVandaag.setFont(new Font("Arial", Font.PLAIN, 13));
                     waterGebruiktVandaag.setHorizontalAlignment(JLabel.LEFT);
 
                     JLabel verbruik = new JLabel();
-                    verbruik.setText("Water gebruikt deze maand door de druppel irrigatie: " + waterGebruikMaand + " L ");
+                    try {
+
+                        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/irrigatie", "root", "Rinnegan999!");
+                        Statement statement = connection.createStatement();
+                        ResultSet resultSet = statement.executeQuery("SELECT * FROM irrigatie.hoeveelheden;");
+
+                        while (resultSet.next()) {
+                             waterGebruikMaand = resultSet.getInt("Liters");
+                             String kaas = String.format("%.2f", waterGebruikMaand);
+                            verbruik.setText("Water gebruikt deze maand door de druppel irrigatie: " + kaas + " L ");
+                        }
+
+                    } catch (SQLException a) {
+                        System.out.println("Error in de database");
+                    }
                     verbruik.setFont(new Font("Arial", Font.PLAIN, 13));
                     verbruik.setHorizontalAlignment(JLabel.LEFT);
 
@@ -105,7 +151,7 @@ public class DeGaatGoed {
                     textVak.setBounds(100, 200, 350, 100);
                     textVak.add(verbruik);
                     textVak.add(waterGebruiktVandaag);
-                    textVak.add(verbuikPerUur);
+                   // textVak.add(verbuikPerUur);
                     textVak.setBackground(new Color(94, 163, 226));
 
                     JLabel inhoud = new JLabel();
