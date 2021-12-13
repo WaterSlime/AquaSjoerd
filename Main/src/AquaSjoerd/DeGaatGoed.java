@@ -32,6 +32,7 @@ public class DeGaatGoed {
     double opgeslagenWaterGebruikPerMaand;
     double opgeslagenWaterGebruikVandaag;
     double opgeslagenWaterGebruikPerUur;
+    int inhoudBak = 14;
     String naam = "i";
     String wachtwoord = "";
     String adres = "";
@@ -161,10 +162,25 @@ public class DeGaatGoed {
                     inhoud.setFont(new Font("Arial", Font.PLAIN, 13));
 
                     JLabel waarde = new JLabel();
-                    waarde.setText("75L/250L");
+                    try {
+
+                        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/irrigatie", "root", "Rinnegan999!");
+                        Statement statement = connection.createStatement();
+                        ResultSet resultSet = statement.executeQuery("SELECT * FROM irrigatie.hoeveelheden;");
+
+                        while (resultSet.next()) {
+                        int overigeInhoudBak = resultSet.getInt("inhoud");
+                            waarde.setText(  overigeInhoudBak + "L /" +inhoudBak+"L");
+
+                        }
+
+                    } catch (SQLException a) {
+                        System.out.println("Error in de database");
+                    }
                     waarde.setVerticalAlignment(JLabel.CENTER);
                     waarde.setHorizontalAlignment(JLabel.CENTER);
                     waarde.setFont(new Font("Arial", Font.PLAIN, 13));
+
 
                     JPanel inhoudOver = new JPanel();
                     inhoudOver.setBorder(border);
@@ -338,10 +354,21 @@ public class DeGaatGoed {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             JOptionPane.showMessageDialog(null, "Uw statistieken zijn nu gereset!");
+                            try {
 
-                            waterGebruikMaand = 0;
-                            waterGebruikVandaag = 0;
-                            waterGebruikPerUur = 0.0;
+                                Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/irrigatie", "root", "Rinnegan999!");
+                                Statement statement = connection.createStatement();
+                                ResultSet resultSet = statement.executeQuery("SELECT * FROM irrigatie.hoeveelheden;");
+
+                                statement.executeUpdate("insert into hoeveelheden values('" + 0+ "')");
+
+
+
+
+                            } catch (SQLException a) {
+                                System.out.println("Error in de database");
+                            }
+
                         }
                     });
 
