@@ -32,7 +32,9 @@ public class DeGaatGoed {
     double opgeslagenWaterGebruikPerMaand;
     double opgeslagenWaterGebruikVandaag;
     double opgeslagenWaterGebruikPerUur;
-    int inhoudBak = 14;
+    int inhoudBak = 44;
+    double overigeInhoudBak;
+    double vorigeAantalLiters;
     String naam = "i";
     String wachtwoord = "";
     String adres = "";
@@ -108,23 +110,7 @@ public class DeGaatGoed {
 
 
                     JLabel waterGebruiktVandaag = new JLabel();
-                    try {
 
-                        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/irrigatie", "root", "Rinnegan999!");
-                        Statement statement = connection.createStatement();
-                        ResultSet resultSet = statement.executeQuery("SELECT * FROM irrigatie.hoeveelheden;");
-
-                        while (resultSet.next()) {
-                            waterGebruikVandaag = resultSet.getInt("Liters");
-                            waterGebruikVandaag = (waterGebruikVandaag/30);
-                            String kaas = String.format("%.2f", waterGebruikVandaag);
-                            waterGebruiktVandaag.setText("Water verbruikt aan druppel irrigatie vandaag: " + kaas + " L");
-
-                        }
-
-                    } catch (SQLException a) {
-                        System.out.println("Error in de database");
-                    }
                     waterGebruiktVandaag.setFont(new Font("Arial", Font.PLAIN, 13));
                     waterGebruiktVandaag.setHorizontalAlignment(JLabel.LEFT);
 
@@ -136,9 +122,26 @@ public class DeGaatGoed {
                         ResultSet resultSet = statement.executeQuery("SELECT * FROM irrigatie.hoeveelheden;");
 
                         while (resultSet.next()) {
-                             waterGebruikMaand = resultSet.getInt("Liters");
+                            waterGebruikMaand = resultSet.getInt("Liters");
                              String kaas = String.format("%.2f", waterGebruikMaand);
                             verbruik.setText("Water gebruikt deze maand door de druppel irrigatie: " + kaas + " L ");
+                        }
+
+                    } catch (SQLException a) {
+                        System.out.println("Error in de database");
+                    }
+                    try {
+
+                        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/irrigatie", "root", "Rinnegan999!");
+                        Statement statement = connection.createStatement();
+                        ResultSet resultSet = statement.executeQuery("SELECT * FROM irrigatie.hoeveelheden;");
+
+                        while (resultSet.next()) {
+                            waterGebruikVandaag = resultSet.getInt("Liters");
+                            waterGebruikVandaag = (waterGebruikMaand/30);
+                            String kaas = String.format("%.2f", waterGebruikVandaag);
+                            waterGebruiktVandaag.setText("Water verbruikt aan druppel irrigatie vandaag: " + kaas + " L");
+
                         }
 
                     } catch (SQLException a) {
@@ -169,8 +172,9 @@ public class DeGaatGoed {
                         ResultSet resultSet = statement.executeQuery("SELECT * FROM irrigatie.hoeveelheden;");
 
                         while (resultSet.next()) {
-                        int overigeInhoudBak = resultSet.getInt("inhoud");
-                            waarde.setText(  overigeInhoudBak + "L /" +inhoudBak+"L");
+                     //    overigeInhoudBak = resultSet.getInt("inhoud");
+                         overigeInhoudBak = inhoudBak - waterGebruikMaand;
+                         waarde.setText(  overigeInhoudBak + "L /" +inhoudBak+"L");
 
                         }
 
