@@ -83,9 +83,6 @@ public class DeGaatGoed {
                     statistieken.add(tab);
                     tab.setHorizontalAlignment(JLabel.CENTER);
                     statistieken.setBorder(border);
-
-
-
                     JLabel verbuikPerUur = new JLabel();
                     try {
 
@@ -98,7 +95,6 @@ public class DeGaatGoed {
                             waterGebruikPerUur = (waterGebruikVandaag/24);
                             String kaas = String.format("%.2f", waterGebruikPerUur);
                             verbuikPerUur.setText("Water per uur verbruikt door druppel irrigatie: " + kaas + " L");
-
                         }
 
                     } catch (SQLException a) {
@@ -212,7 +208,6 @@ public class DeGaatGoed {
             }
 
         });
-
 
         homeButton.addActionListener(new ActionListener() {
             @Override
@@ -778,12 +773,14 @@ public class DeGaatGoed {
                 adresLabel.setText("Voer hier uw adres in: ");
                 adresLabel.setFont(new Font("Arial", Font.PLAIN, 12));
 
+
+                JPanel wachtwoordPanel = new JPanel();
                 JPanel adresPanel = new JPanel();
-                adresPanel.setBounds(250, 0, 200, 75);
+                wachtwoordPanel.setBounds(250, 0, 200, 75);
                 adresPanel.add(adresLabel);
                 adresPanel.add(adresInvoer);
 
-                JTextField invoerWachtwoord = new JTextField();
+                JPasswordField invoerWachtwoord = new JPasswordField();
                 invoerWachtwoord.setPreferredSize(new Dimension(200, 25));
 
 
@@ -791,11 +788,23 @@ public class DeGaatGoed {
                 wachtwoordVraag.setText("Voer uw wachtwoord in: ");
                 wachtwoordVraag.setFont(new Font("Arial", Font.PLAIN, 12));
 
+                JCheckBox hashie = new JCheckBox("Laat wachtwoord zien");
+                hashie.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if (hashie.isSelected()){
+                            invoerWachtwoord.setEchoChar((char)0);
+                        }
+                        else {
+                            invoerWachtwoord.setEchoChar('*');
+                        }
+                    }
+                });
 
-                JPanel wachtwoordPanel = new JPanel();
-                wachtwoordPanel.setBounds(0, 75, 200, 50);
+                adresPanel.setBounds(0, 75, 200, 50);
                 wachtwoordPanel.add(wachtwoordVraag);
                 wachtwoordPanel.add(invoerWachtwoord);
+                wachtwoordPanel.add(hashie);
 
                 JTextField invoerNaam = new JTextField();
                 invoerNaam.setPreferredSize(new Dimension(200, 25));
