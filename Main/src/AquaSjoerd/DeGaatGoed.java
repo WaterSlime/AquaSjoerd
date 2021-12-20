@@ -35,7 +35,7 @@ public class DeGaatGoed {
     int inhoudBak = 44;
     double overigeInhoudBak;
     double vorigeAantalLiters;
-    String naam = "i";
+    String naam = "";
     String wachtwoord = "";
     String adres = "";
     String stad = "";
@@ -44,13 +44,32 @@ public class DeGaatGoed {
     int abonnementsDuur = 1;
     JFrame frameStatistieken = new JFrame();
     JFrame beginFrame = new JFrame("AquaSjoerd");
+    int getalNul = 0;
+
 
     public DeGaatGoed() {
+        try {
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/irrigatie", "root", "Rinnegan999!");
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM klantendatabaseaquasjoerd.klant;");
 
-
-
-        JOptionPane.showMessageDialog(null, "Welkom bij AquaSjoerd! Registreer u eerst voor gebruik van de applicatie.");
-
+            while (resultSet.next()) {
+                naam = resultSet.getString("Naam");
+                adres = resultSet.getString("Adres");
+                postcode= resultSet.getString("Postcode");
+                stad = resultSet.getString("stad");
+                wachtwoord = resultSet.getString("wachtwoord");
+                postcode = resultSet.getString("postcode");
+            }
+        } catch (SQLException a) {
+            JOptionPane.showMessageDialog(null,"Error in de database");
+        }
+        if (naam == "") {
+            JOptionPane.showMessageDialog(null, "Welkom bij AquaSjoerd! Registreer u eerst voor gebruik van de applicatie.");
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "Welkom "+ naam);
+        }
         statistiekenButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -168,9 +187,8 @@ public class DeGaatGoed {
                         ResultSet resultSet = statement.executeQuery("SELECT * FROM irrigatie.hoeveelheden;");
 
                         while (resultSet.next()) {
-                     //    overigeInhoudBak = resultSet.getInt("inhoud");
-                         overigeInhoudBak = inhoudBak - waterGebruikMaand;
-                         waarde.setText(  overigeInhoudBak + "L /" +inhoudBak+"L");
+                      overigeInhoudBak = inhoudBak - waterGebruikMaand;
+                         waarde.setText(overigeInhoudBak + "L /" +inhoudBak+"L");
 
                         }
 
@@ -181,16 +199,49 @@ public class DeGaatGoed {
                     waarde.setHorizontalAlignment(JLabel.CENTER);
                     waarde.setFont(new Font("Arial", Font.PLAIN, 13));
 
+                    JButton refreshKnop = new JButton();
+                    refreshKnop.setText("Refresh statistieken");
+                    refreshKnop.setBackground(new Color(94, 163, 226));
+                    refreshKnop.setBorder(border);
+
+
+                    refreshKnop.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            try {
+                                Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/irrigatie", "root", "Rinnegan999!");
+                                Statement statement = connection.createStatement();
+                                ResultSet resultSet = statement.executeQuery("SELECT * FROM irrigatie.hoeveelheden;");
+
+                                while (resultSet.next()) {
+                                    waterGebruikMaand= resultSet.getInt("Liters");
+                                    overigeInhoudBak = inhoudBak - waterGebruikMaand;
+                                    waterGebruikVandaag = waterGebruikMaand /30;
+                                }
+
+                            } catch (SQLException a) {
+                                System.out.println("Error in de database");
+                            }
+                            JOptionPane.showMessageDialog(null, "De statistieken zijn vernieuwd!");
+
+                        }
+                    });
+
+
+                    JPanel refreshPanel = new JPanel();
+                    refreshPanel.setBounds(550, 340, 150, 60);
+                    refreshPanel.setBackground(new Color(94, 163, 226));
+                    refreshPanel.add(refreshKnop);
+                    refreshPanel.setBorder(border);
 
                     JPanel inhoudOver = new JPanel();
                     inhoudOver.setBorder(border);
-                    inhoudOver.setBounds(550, 50, 150, 350);
+                    inhoudOver.setBounds(550, 50, 150, 290);
                     inhoudOver.add(inhoud);
                     inhoudOver.add(waarde);
                     inhoudOver.setBackground(new Color(94, 163, 226));
 
-                    //   JOptionPane.showMessageDialog(null, "Welkom op het Statistiekenscherm!");
-//            JFrame frameStatistieken = new JFrame();
+
                     frameStatistieken.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
                     frameStatistieken.setLayout(null);
                     frameStatistieken.setSize(700, 400);
@@ -202,6 +253,7 @@ public class DeGaatGoed {
                     frameStatistieken.add(textVak);
                     frameStatistieken.add(inhoudOver);
                     frameStatistieken.add(plaatje);
+                    frameStatistieken.add(refreshPanel);
                 } else {
                     JOptionPane.showMessageDialog(null, "Registreer u eerst voor het gebruik");
                 }
@@ -264,23 +316,23 @@ public class DeGaatGoed {
 
 
                     JLabel naamKopje = new JLabel();
-                    naamKopje.setText("Statistieken");
+                    naamKopje.setText(" Opgeslagen statistieken");
                     naamKopje.setFont(new Font("Arial", Font.PLAIN, 12));
 
 
                     JPanel statistiekenKopje = new JPanel();
-                    statistiekenKopje.setBounds(600, 50, 100, 20);
+                    statistiekenKopje.setBounds(500, 50, 200, 20);
                     statistiekenKopje.setBorder(border);
                     statistiekenKopje.setBackground(new Color(94, 163, 226));
                     statistiekenKopje.add(naamKopje);
 
                     JLabel statistiekenTekst = new JLabel();
-                    statistiekenTekst.setText("(Info)");
+                    statistiekenTekst.setText("Water geïrrigeerd: " + opgeslagenWaterGebruikPerMaand + "L");
                     statistiekenTekst.setFont(new Font("Arial", Font.PLAIN, 12));
 
 
                     JPanel statistiekenInfo = new JPanel();
-                    statistiekenInfo.setBounds(600, 70, 100, 330);
+                    statistiekenInfo.setBounds(500, 70, 200, 330);
                     statistiekenInfo.setBorder(border);
                     statistiekenInfo.setBackground(new Color(94, 163, 226));
                     statistiekenInfo.add(statistiekenTekst);
@@ -334,8 +386,23 @@ public class DeGaatGoed {
                     slaStatistiekenOp.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            opgeslagenWaterGebruikPerMaand = waterGebruikMaand;
-                            opgeslagenWaterGebruikPerUur = waterGebruikPerUur;
+
+                            try {
+
+                                Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/irrigatie", "root", "Rinnegan999!");
+                                Statement statement = connection.createStatement();
+                                ResultSet resultSet = statement.executeQuery("SELECT * FROM irrigatie.hoeveelheden;");
+
+                                while (resultSet.next()) {
+                                    waterGebruikMaand = resultSet.getInt("Liters");
+                                    opgeslagenWaterGebruikPerMaand = waterGebruikMaand;
+                                    opgeslagenWaterGebruikVandaag = opgeslagenWaterGebruikPerMaand/30;
+                                }
+
+                            } catch (SQLException a) {
+                                System.out.println("Error in de database");
+                            }
+
                             opgeslagenWaterGebruikVandaag = waterGebruikVandaag;
                             JOptionPane.showMessageDialog(null, "Uw statistieken zijn opgeslagen!");
                         }
@@ -359,7 +426,7 @@ public class DeGaatGoed {
                                 Statement statement = connection.createStatement();
                                 ResultSet resultSet = statement.executeQuery("SELECT * FROM irrigatie.hoeveelheden;");
 
-                                statement.executeUpdate("insert into hoeveelheden values('" + 0+ "')");
+                                statement.executeUpdate("insert into hoeveelheden values('"+ getalNul + "')");
 
 
 
@@ -648,6 +715,7 @@ public class DeGaatGoed {
                     });
 
                     JLabel naam2 = new JLabel();
+
                     naam2.setText("Uw naam: " + naam);
                     naam2.setFont(new Font("Arial", Font.PLAIN, 16));
 
