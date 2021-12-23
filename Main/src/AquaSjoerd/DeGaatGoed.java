@@ -32,7 +32,7 @@ public class DeGaatGoed {
     double opgeslagenWaterGebruikPerMaand;
     double opgeslagenWaterGebruikVandaag;
     double opgeslagenWaterGebruikPerUur;
-    int inhoudBak = 44;
+    double inhoudBak = 44.0;
     double overigeInhoudBak;
     double vorigeAantalLiters;
     String naam = "";
@@ -86,7 +86,7 @@ public class DeGaatGoed {
                     JLabel kopnaam = new JLabel();
                     JPanel koppanel = new JPanel();
                     kopnaam.setText("AquaSjoerd");
-                    kopnaam.setFont(new Font("Arial", Font.PLAIN, 20));
+                    kopnaam.setFont(new Font("Times New Roman", Font.PLAIN, 22));
                     kopnaam.setHorizontalAlignment(JLabel.CENTER);
                     koppanel.setBackground(new Color(94, 163, 226));
                     koppanel.add(kopnaam);
@@ -228,15 +228,15 @@ public class DeGaatGoed {
                     });
 
 
-                    JPanel refreshPanel = new JPanel();
-                    refreshPanel.setBounds(550, 340, 150, 60);
-                    refreshPanel.setBackground(new Color(94, 163, 226));
-                    refreshPanel.add(refreshKnop);
-                    refreshPanel.setBorder(border);
+//                    JPanel refreshPanel = new JPanel();
+//                    refreshPanel.setBounds(550, 340, 150, 60);
+//                    refreshPanel.setBackground(new Color(94, 163, 226));
+//                    refreshPanel.add(refreshKnop);
+//                    refreshPanel.setBorder(border);
 
                     JPanel inhoudOver = new JPanel();
                     inhoudOver.setBorder(border);
-                    inhoudOver.setBounds(550, 50, 150, 290);
+                    inhoudOver.setBounds(550, 50, 150, 350);
                     inhoudOver.add(inhoud);
                     inhoudOver.add(waarde);
                     inhoudOver.setBackground(new Color(94, 163, 226));
@@ -253,7 +253,7 @@ public class DeGaatGoed {
                     frameStatistieken.add(textVak);
                     frameStatistieken.add(inhoudOver);
                     frameStatistieken.add(plaatje);
-                    frameStatistieken.add(refreshPanel);
+                   // frameStatistieken.add(refreshPanel);
                 } else {
                     JOptionPane.showMessageDialog(null, "Registreer u eerst voor het gebruik");
                 }
@@ -288,7 +288,7 @@ public class DeGaatGoed {
 
                     JLabel kopje = new JLabel();
                     kopje.setText("AquaSjoerd");
-                    kopje.setFont(new Font("Arial", Font.PLAIN, 20));
+                    kopje.setFont(new Font("Times New Roman", Font.PLAIN, 22));
 
 
                     JPanel kopNaam = new JPanel();
@@ -461,7 +461,7 @@ public class DeGaatGoed {
 
                     JLabel kopNaam = new JLabel();
                     kopNaam.setText("AquaSjoerd");
-                    kopNaam.setFont(new Font("Arial", Font.PLAIN, 20));
+                    kopNaam.setFont(new Font("Times New Roman", Font.PLAIN, 22));
 
 
                     JPanel kop = new JPanel();
@@ -654,7 +654,7 @@ public class DeGaatGoed {
                     JLabel AquaSjoerd = new JLabel();
                     AquaSjoerd.setText("AquaSjoerd");
 
-                    AquaSjoerd.setFont(new Font("Arial", Font.PLAIN, 20));
+                    AquaSjoerd.setFont(new Font("Times New Roman", Font.PLAIN, 22));
 
                     AquaSjoerd.setOpaque(true);
                     AquaSjoerd.setBackground(new Color(94, 163, 226));
@@ -755,7 +755,7 @@ public class DeGaatGoed {
 
                     JLabel kopNaam = new JLabel();
                     kopNaam.setText("AquaSjoerd");
-                    kopNaam.setFont(new Font("Arial", Font.PLAIN, 20));
+                    kopNaam.setFont(new Font("Times New Roman", Font.PLAIN, 22));
 
                     JPanel kop = new JPanel();
                     kop.setBounds(150, 0, 550, 50);
