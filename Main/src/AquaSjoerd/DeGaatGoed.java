@@ -35,6 +35,7 @@ public class DeGaatGoed {
     double inhoudBak = 44.0;
     double overigeInhoudBak;
     double vorigeAantalLiters;
+    JFrame gekframe = new JFrame();
     String naam = "";
     String wachtwoord = "";
     String adres = "";
@@ -45,6 +46,8 @@ public class DeGaatGoed {
     JFrame frameStatistieken = new JFrame();
     JFrame beginFrame = new JFrame("AquaSjoerd");
     int getalNul = 0;
+    int verlengingTeller = 0;
+    int registratieTeller =0;
 
 
     public DeGaatGoed() {
@@ -167,7 +170,7 @@ public class DeGaatGoed {
 
                     JPanel textVak = new JPanel();
                     textVak.setBorder(border);
-                    textVak.setBounds(100, 200, 350, 100);
+                    textVak.setBounds(100, 200, 400, 100);
                     textVak.add(verbruik);
                     textVak.add(waterGebruiktVandaag);
                    // textVak.add(verbuikPerUur);
@@ -240,7 +243,7 @@ public class DeGaatGoed {
                     inhoudOver.add(inhoud);
                     inhoudOver.add(waarde);
                     inhoudOver.setBackground(new Color(94, 163, 226));
-
+                    inhoudOver.add(refreshKnop);
 
                     frameStatistieken.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
                     frameStatistieken.setLayout(null);
@@ -411,7 +414,7 @@ public class DeGaatGoed {
                     opvragenPG.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            JOptionPane.showMessageDialog(null, ("Er is een email verzonden naar " + emailadress + " waarin staat vermeld welke Persoonlijke gegevens wij van u verwerken."));
+                            JOptionPane.showMessageDialog(null, ("Er is een email verzonden naar " + emailadress + " waarin staat vermeld welke persoonlijke gegevens wij van u verwerken."));
 
                         }
                     });
@@ -507,12 +510,12 @@ public class DeGaatGoed {
                     knop.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
+                            if (verlengingTeller == 0) {
+                                Border border = BorderFactory.createLineBorder(Color.BLACK);
 
-                            Border border = BorderFactory.createLineBorder(Color.BLACK);
+                                String[] maandenLijst = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"};
 
-                            String[] maandenLijst = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"};
-
-                            JComboBox lijst = new JComboBox(maandenLijst);
+                                JComboBox lijst = new JComboBox(maandenLijst);
 
 
 //                        JButton maanden12Knop = new JButton();
@@ -532,19 +535,21 @@ public class DeGaatGoed {
 
 //                        JButton maanden3Knop = new JButton();
 //                        maanden3Knop.setText("3 maanden");
-
-                            JPanel maanden3 = new JPanel();
-                            maanden3.setBounds(0, 50, 100, 100);
+                                JLabel maandenLabelLel = new JLabel();
+                                maandenLabelLel.setText(" Maanden");
+                                JPanel maanden3 = new JPanel();
+                                maanden3.setBounds(0, 50, 150, 100);
 //                        maanden3.add(maanden3Knop);
-                            maanden3.add(lijst);
+                                maanden3.add(lijst);
+                                maanden3.add(maandenLabelLel);
 //                        JButton knop = new JButton();
 //                        knop.setText("Submit");
-                            JButton submitKnop = new JButton();
-                            submitKnop.setText("Submit");
+                                JButton submitKnop = new JButton();
+                                submitKnop.setText("Submit");
 
-                            JPanel submitButtonPanel = new JPanel();
-                            submitButtonPanel.setBounds(150, 50, 75, 50);
-                            submitButtonPanel.add(submitKnop);
+                                JPanel submitButtonPanel = new JPanel();
+                                submitButtonPanel.setBounds(150, 50, 75, 50);
+                                submitButtonPanel.add(submitKnop);
 
 
 //
@@ -557,74 +562,56 @@ public class DeGaatGoed {
 //                        String aantal = antwoord.getText();
 
 
-                            JPanel antwoordje = new JPanel();
-                            antwoordje.setBounds(0, 25, 300, 200);
-                            // antwoordje.add(antwoord);
+                                JPanel antwoordje = new JPanel();
+                                antwoordje.setBounds(0, 25, 300, 200);
+                                // antwoordje.add(antwoord);
 
 
-                            JLabel label = new JLabel();
-                            label.setText("Hoelang wilt u uw abonnement verlengen?");
-                            JPanel text = new JPanel();
-                            text.setBounds(0, 0, 300, 100);
-                            text.add(label);
+                                JLabel label = new JLabel();
+                                label.setText("Hoelang wilt u uw abonnement verlengen?");
+                                JPanel text = new JPanel();
+                                text.setBounds(0, 0, 300, 100);
+                                text.add(label);
 
 
-                            JFrame frame = new JFrame();
-                            frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-                            frame.setLayout(null);
-                            frame.setSize(350, 150);
-                            frame.setResizable(false);
-                            frame.setTitle("Verlengen");
-                            frame.setVisible(true);
-                            frame.add(text);
-                            frame.add(antwoordje);
+
+                                gekframe.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+                                gekframe.setLayout(null);
+                                gekframe.setSize(350, 150);
+                                gekframe.setResizable(false);
+                                gekframe.setTitle("Verlengen");
+                                gekframe.setVisible(true);
+                                gekframe.add(text);
+                                gekframe.add(antwoordje);
 //                      frame.add(buttonPanel);
-                            frame.add(maanden3);
+                                gekframe.add(maanden3);
 //                      frame.add(maanden6);
 //                      frame.add(maanden12);
-                            frame.add(submitButtonPanel);
-                            submitKnop.addActionListener(new ActionListener() {
-                                @Override
-                                public void actionPerformed(ActionEvent e) {
-                                    JOptionPane.showMessageDialog(null, "Uw verzoek tot verlenging is verstuurd!");
-                                    frame.setVisible(false);
-                                }
-                            });
-//                        maanden3Knop.addActionListener(new ActionListener() {
-//                            @Override
-//                            public void actionPerformed(ActionEvent e) {
-//                                JOptionPane.showMessageDialog(null, "Uw verzoek tot een abonnementverlenging van 12 maanden is verzonden. Wij nemen z.s.m. contact met u op!");
-//                                abonnementsDuur+=3;
-//                        frame.setVisible(false);
-//                            }
-//                        });
-//
-//                        maanden6Knop.addActionListener(new ActionListener() {
-//                            @Override
-//                            public void actionPerformed(ActionEvent e) {
-//                                JOptionPane.showMessageDialog(null,"Uw verzoek tot een abonnementverlenging van 6 maanden is verzonden. Wij nemen z.s.m. contact met u op!");
-//                                abonnementsDuur+=6;
-//                                frame.setVisible(false);
-//                            }
-//                        });
+                                gekframe.add(submitButtonPanel);
 
-//                        maanden12Knop.addActionListener(new ActionListener() {
-//                            @Override
-//                            public void actionPerformed(ActionEvent e) {
-//                                JOptionPane.showMessageDialog(null, "Uw verzoek tot een abonnementverlenging van 12 maanden is verzonden. Wij nemen z.s.m. contact met u op!");
-//                                abonnementsDuur+=12;
-//                                frame.setVisible(false);
-//
-//                            }
-//                        });
+                                submitKnop.addActionListener(new ActionListener() {
+                                    @Override
+                                    public void actionPerformed(ActionEvent e) {
+                                        if (verlengingTeller == 0) {
+                                            JOptionPane.showMessageDialog(null, "Uw verzoek tot verlenging is verstuurd!");
+                                            gekframe.setVisible(false);
+                                            verlengingTeller++;
+                                        }
+                                    }
+                                });
+                            }
+
+                            else {
+                                JOptionPane.showMessageDialog(null, "U heeft recent al een verzoek ingediend, probeer het over 3 maanden weer.");
+                            }
+
 
                             knop.addActionListener(new ActionListener() {
                                 @Override
                                 public void actionPerformed(ActionEvent e) {
 
                                     JOptionPane.showMessageDialog(null, "Uw aanzoek tot verlenging is verstuurd. Wij zullen z.s.m. contact met u opnemen!");
-//                            abonnementsDuur += aantal;
-                                    frame.setVisible(false);
+                    gekframe.setVisible(false);
 
                                 }
                             });
