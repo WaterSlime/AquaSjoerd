@@ -313,10 +313,20 @@ public class DeGaatGoed {
 
 
                     JPanel info = new JPanel();
-                    info.setBounds(100, 200, 350, 80);
+                    info.setBounds(100, 220, 350, 80);
                     info.setBorder(border);
                     info.setBackground(new Color(94, 163, 226));
 
+
+                    JLabel echtNieuws = new JLabel();
+                    echtNieuws.setText("Al gekeken naar de Black Friday deals van AquaSjoerd?");
+
+                    JLabel meerNieuws = new JLabel();
+                    meerNieuws.setText("Volg ons ook op Instagram! @Sjoerd_De_Aap");
+
+
+                    info.add(echtNieuws);
+                    info.add(meerNieuws);
 
                     JLabel naamKopje = new JLabel();
                     naamKopje.setText(" Opgeslagen statistieken");
