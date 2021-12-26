@@ -133,6 +133,7 @@ public class DeGaatGoed {
                     waterGebruiktVandaag.setHorizontalAlignment(JLabel.LEFT);
 
                     JLabel verbruik = new JLabel();
+                    verbruik.setFont(new Font("Arial", Font.ITALIC,14));
                     try {
 
                         Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/irrigatie", "root", "Rinnegan999!");
@@ -142,7 +143,9 @@ public class DeGaatGoed {
                         while (resultSet.next()) {
                             waterGebruikMaand = resultSet.getInt("Liters");
                              String kaas = String.format("%.2f", waterGebruikMaand);
+                            verbruik.setFont(new Font("Arial", Font.ITALIC,14));
                             verbruik.setText("Water gebruikt deze maand door de druppel irrigatie: " + kaas + " L ");
+
                         }
 
                     } catch (SQLException a) {
@@ -158,6 +161,7 @@ public class DeGaatGoed {
                             waterGebruikVandaag = resultSet.getInt("Liters");
                             waterGebruikVandaag = (waterGebruikMaand/30);
                             String kaas = String.format("%.2f", waterGebruikVandaag);
+                            waterGebruiktVandaag.setFont(new Font("Arial", Font.ITALIC,14));
                             waterGebruiktVandaag.setText("Water verbruikt aan druppel irrigatie vandaag: " + kaas + " L");
 
                         }
@@ -180,7 +184,7 @@ public class DeGaatGoed {
                     inhoud.setText("Water over in de tank ");
                     inhoud.setVerticalAlignment(JLabel.TOP);
                     inhoud.setHorizontalAlignment(JLabel.LEFT);
-                    inhoud.setFont(new Font("Arial", Font.PLAIN, 13));
+                    inhoud.setFont(new Font("Arial", Font.ITALIC, 13));
 
                     JLabel waarde = new JLabel();
                     try {
@@ -302,7 +306,7 @@ public class DeGaatGoed {
 
                     JLabel nieuwsEnInfo = new JLabel();
                     nieuwsEnInfo.setText("Nieuws en info:");
-                    nieuwsEnInfo.setFont(new Font("Arial", Font.PLAIN, 12));
+                    nieuwsEnInfo.setFont(new Font("Arial", Font.ITALIC, 12));
 
 
                     JPanel nieuwsEnInfoVak = new JPanel();
@@ -330,7 +334,7 @@ public class DeGaatGoed {
 
                     JLabel naamKopje = new JLabel();
                     naamKopje.setText(" Opgeslagen statistieken");
-                    naamKopje.setFont(new Font("Arial", Font.PLAIN, 12));
+                    naamKopje.setFont(new Font("Arial", Font.ITALIC, 12));
 
 
                     JPanel statistiekenKopje = new JPanel();
@@ -707,7 +711,35 @@ public class DeGaatGoed {
                     contactInfo.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            JOptionPane.showMessageDialog(null, "Wij gebruiken uw Persoonlijke gegevens alleen voor administratieve processen binnen onze startup. Uw gegevens worden ook niet gedeeld.");
+
+                       JOptionPane.showMessageDialog(null, "Privacy policy\n" +
+                               "\n" +
+                               "AquaSjoerd\n" +
+                               "Rotterdamseweg 137 \n" +
+                               "aquasjoerdbv@gmail.com\n" +
+                               "\n" +
+                               "- Contacteren\n" +
+                               "Wij verwerken uw gegevens om deze vervolgens weer te gebruiken voor het mogelijk benodigd contact tussen cliënt en bedrijf.\n" +
+                               "\n" +
+                               "- Nieuwsbrieven\n" +
+                               "Wij verwerken uw gegevens om nieuws over onze actie's en bezigheden naar u over te brengen.\n" +
+                               "\n" +
+                               "Volgens de AVG principes heeft de cliënt het recht op inzage van zijn/haar persoonsgegevens. \n" +
+                               "De cliënt kan vervolgens kiezen voor een correctie of verwijdering van bepaalde gegevens mits dit benodigd lijkt voor de cliënt. \n" +
+                               "Verwijdering mag echter alleen als de gegevens als niet relevant worden beschouwd door het bedrijf.\n" +
+                               "\n" +
+                               "De cliënt heeft recht op dataportabiliteit. Dit houdt in dat de cliënt alle digitale gegevens kan ontvangen.\n" +
+                               "\n" +
+                               "De cliënt heeft recht op vergetelheid, de cliënt kan vergeten worden.\n" +
+                               "\n" +
+                               "De cliënt heeft klachtrecht, hij/zij mag bezwaar maken tegen de gegevensverwerking.\n" +
+                               "\n" +
+                               "De cliënt kan een aanzoek doen tot een kijk op geautomatiseerde besluitsvorming(en) op basis van de persoonsgegevens.\n" +
+                               "\n" +
+                               "Wij delen de cliënt's persoonsgegevens NIET met derden.\n" +
+                               "\n" +
+                               "De lengte van de persoonsgegevens bewaring, is een maand groter als de lengte van het abonnement.\n" +
+                               "Wij verwijderen uw persoonsgegevens na een maand dat uw abonnement is afgelopen, zodat u uw nog een maand kan bedenken voor verwijdering.");
                         }
                     });
 
