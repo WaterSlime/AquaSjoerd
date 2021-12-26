@@ -42,7 +42,7 @@ public class DeGaatGoed {
     String stad = "";
     String postcode = "";
     String emailadress = "";
-    int abonnementsDuur = 1;
+    int abonnementsDuur = 7;
     JFrame frameStatistieken = new JFrame();
     JFrame beginFrame = new JFrame("AquaSjoerd");
     int getalNul = 0;
@@ -161,7 +161,7 @@ public class DeGaatGoed {
                             waterGebruikVandaag = resultSet.getInt("Liters");
                             waterGebruikVandaag = (waterGebruikMaand/30);
                             String kaas = String.format("%.2f", waterGebruikVandaag);
-                            waterGebruiktVandaag.setFont(new Font("Arial", Font.ITALIC,14));
+                           // waterGebruiktVandaag.setFont(new Font("Arial", Font.ITALIC,14));
                             waterGebruiktVandaag.setText("Water verbruikt aan druppel irrigatie vandaag: " + kaas + " L");
 
                         }
@@ -616,7 +616,7 @@ public class DeGaatGoed {
                             }
 
                             else {
-                                JOptionPane.showMessageDialog(null, "U heeft recent al een verzoek ingediend, probeer het over 3 maanden weer.");
+                                JOptionPane.showMessageDialog(null, "U heeft recent al een verzoek ingediend, probeer het over een maand weer.");
                             }
 
 
@@ -641,16 +641,24 @@ public class DeGaatGoed {
 
                     JPanel panel1 = new JPanel();
                     JLabel abonnementen = new JLabel();
-                    abonnementen.setText("Overige maanden abonnement:" + String.valueOf(abonnementsDuur));
+                    abonnementen.setFont(new Font("Arial", Font.ITALIC,14));
+                    abonnementen.setText("Abonnementsinformatie");
 
-                    abonnementen.setFont(new Font("Arial", Font.PLAIN, 14));
+                    JLabel kosten = new JLabel();
+                    kosten.setText("€12,79 per maand");
+                    kosten.setFont(new Font("Arial", Font.PLAIN, 15));
+
+                    JLabel aantalMaanden = new JLabel();
+                    aantalMaanden.setText("Nog " + abonnementsDuur + " maand(en) over");
+                    aantalMaanden.setFont(new Font("Arial", Font.PLAIN, 15));
 
                     abonnementen.setBackground(new Color(94, 163, 226));
                     panel1.setBackground(new Color(94, 163, 226));
                     panel1.setBounds(100, 100, 210, 200);
                     panel1.add(abonnementen);
                     panel1.setBorder(border);
-
+                    panel1.add(kosten);
+                    panel1.add(aantalMaanden);
                     JPanel panel2 = new JPanel();
                     JLabel AquaSjoerd = new JLabel();
                     AquaSjoerd.setText("AquaSjoerd");
