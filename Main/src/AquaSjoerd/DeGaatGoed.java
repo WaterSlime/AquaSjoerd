@@ -224,13 +224,14 @@ public class DeGaatGoed {
                                     waterGebruikMaand= resultSet.getInt("Liters");
                                     overigeInhoudBak = inhoudBak - waterGebruikMaand;
                                     waterGebruikVandaag = waterGebruikMaand /30;
+                                    frameStatistieken.setVisible(false);
                                 }
 
                             } catch (SQLException a) {
                                 System.out.println("Error in de database");
                             }
                             JOptionPane.showMessageDialog(null, "De statistieken zijn vernieuwd!");
-
+                        frameStatistieken.setVisible(true);
                         }
                     });
 
@@ -344,7 +345,12 @@ public class DeGaatGoed {
                     statistiekenKopje.add(naamKopje);
 
                     JLabel statistiekenTekst = new JLabel();
-                    statistiekenTekst.setText("Water geïrrigeerd: " + opgeslagenWaterGebruikPerMaand + "L");
+                    if (opgeslagenWaterGebruikPerMaand > 0) {
+                        statistiekenTekst.setText("Water geïrrigeerd: " + opgeslagenWaterGebruikPerMaand + "L");
+                    }
+                    else {
+                        statistiekenTekst.setText("Er is nog niks opgeslagen");
+                    }
                     statistiekenTekst.setFont(new Font("Arial", Font.PLAIN, 12));
 
 
@@ -746,8 +752,13 @@ public class DeGaatGoed {
                                "\n" +
                                "Wij delen de cliënt's persoonsgegevens NIET met derden.\n" +
                                "\n" +
+                               "Voor het claimen van de klantrechten is het vereist dat de cliënt hier een aanzoek voor doet. Dit kan via onze klantenservice.\n" +
+                               "\n" +
                                "De lengte van de persoonsgegevens bewaring, is een maand groter als de lengte van het abonnement.\n" +
-                               "Wij verwijderen uw persoonsgegevens na een maand dat uw abonnement is afgelopen, zodat u uw nog een maand kan bedenken voor verwijdering.");
+                               "\n" +
+                               "Wij verwijderen uw persoonsgegevens na een maand dat uw abonnement is afgelopen, zodat u zich nog een maand kan bedenken voor verwijdering.\n" +
+                               "\n" +
+                               "U heeft onze privacy voorwaarden geaccepteerd bij het aanschaffen van AquaSjoerd");
                         }
                     });
 
