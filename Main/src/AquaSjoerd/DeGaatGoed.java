@@ -345,7 +345,7 @@ public class DeGaatGoed {
                     statistiekenKopje.add(naamKopje);
 
                     JLabel statistiekenTekst = new JLabel();
-                    if (opgeslagenWaterGebruikPerMaand > 0) {
+                    if (opgeslagenWaterGebruikPerMaand > -1) {
                         statistiekenTekst.setText("Water geïrrigeerd: " + opgeslagenWaterGebruikPerMaand + "L");
                     }
                     else {
@@ -434,7 +434,23 @@ public class DeGaatGoed {
                     opvragenPG.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            JOptionPane.showMessageDialog(null, ("Er is een email verzonden naar " + emailadress + " waarin staat vermeld welke persoonlijke gegevens wij van u verwerken."));
+
+                            try {
+                                Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/irrigatie", "root", "Rinnegan999!");
+                                Statement statement = connection.createStatement();
+                                ResultSet resultSet = statement.executeQuery("SELECT * FROM klantendatabaseaquasjoerd.klant;");
+
+
+                                while (resultSet.next()) {
+                                    emailadress = resultSet.getString("Emailadres");
+                                }
+                                JOptionPane.showMessageDialog(null, ("Er is een email verzonden naar " + emailadress + " waarin staat vermeld welke persoonlijke gegevens wij van u verwerken."));
+
+
+                            } catch (SQLException a) {
+                                JOptionPane.showMessageDialog(null,"Error in de database");
+                            }
+
 
                         }
                     });
@@ -658,6 +674,14 @@ public class DeGaatGoed {
                     aantalMaanden.setText("Nog " + abonnementsDuur + " maand(en) over");
                     aantalMaanden.setFont(new Font("Arial", Font.PLAIN, 15));
 
+                    JLabel beginDatum = new JLabel();
+                    beginDatum.setText("Startdatum: 13-01-2022");
+                    beginDatum.setFont(new Font("Arial", Font.PLAIN, 15));
+
+                    JLabel eindDatum = new JLabel();
+                    eindDatum.setText("Einddatum: 13-08-2022");
+                    eindDatum.setFont(new Font("Arial", Font.PLAIN, 15));
+
                     abonnementen.setBackground(new Color(94, 163, 226));
                     panel1.setBackground(new Color(94, 163, 226));
                     panel1.setBounds(100, 100, 210, 200);
@@ -665,6 +689,9 @@ public class DeGaatGoed {
                     panel1.setBorder(border);
                     panel1.add(kosten);
                     panel1.add(aantalMaanden);
+                    panel1.add(beginDatum);
+                    panel1.add(eindDatum);
+
                     JPanel panel2 = new JPanel();
                     JLabel AquaSjoerd = new JLabel();
                     AquaSjoerd.setText("AquaSjoerd");
@@ -758,7 +785,7 @@ public class DeGaatGoed {
                                "\n" +
                                "Wij verwijderen uw persoonsgegevens na een maand dat uw abonnement is afgelopen, zodat u zich nog een maand kan bedenken voor verwijdering.\n" +
                                "\n" +
-                               "U heeft onze privacy voorwaarden geaccepteerd bij het aanschaffen van AquaSjoerd");
+                               "Bij het aanschaffen van AquaSjoerd heeft u onze privacy voorwaarden geaccepteerd.");
                         }
                     });
 
