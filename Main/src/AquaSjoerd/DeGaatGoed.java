@@ -25,6 +25,7 @@ public class DeGaatGoed {
     private JButton persoonlijkeGegevensButton;
     private JPanel mainpanel;
     private JButton inlogButton;
+    private JButton Gewassen;
     private JLabel tekst;
     double waterGebruikMaand;
     double waterGebruikVandaag;
@@ -1010,6 +1011,163 @@ public class DeGaatGoed {
                 });
             }
         });
+        Gewassen.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                JButton andersKnop = new JButton();
+                andersKnop.setText("Submit");
+                andersKnop.setFont(new Font("Arial", Font.ITALIC, 14));
+
+                JTextField andersField = new JTextField();
+                andersField.setPreferredSize(new Dimension(100,25));
+
+                JLabel andersLabel = new JLabel();
+                andersLabel.setText("Anders: ");
+                andersLabel.setFont(new Font("Arial", Font.ITALIC,14));
+
+                JButton ijsbergslaKnop = new JButton();
+                ijsbergslaKnop.setText("IJsbergsla");
+                ijsbergslaKnop.setFont(new Font("Arial", Font.ITALIC,14));
+
+                JButton wortelKnop = new JButton();
+                wortelKnop.setText("    Wortel   ");
+                wortelKnop.setFont(new Font("Arial", Font.ITALIC, 14));
+
+                JButton tarweKnop = new JButton();
+                tarweKnop.setText("   Tarwe   ");
+                tarweKnop.setFont(new Font("Arial", Font.ITALIC,14));
+
+
+                JButton maisKnop = new JButton();
+                maisKnop.setText("     Mais     ");
+                maisKnop.setFont(new Font("Arial", Font.ITALIC, 14));
+
+                JButton aardappelKnop = new JButton();
+                aardappelKnop.setText("Aardappel");
+                aardappelKnop.setFont(new Font("Arial", Font.ITALIC,14));
+
+                JPanel aardappelPanel = new JPanel();
+                aardappelPanel.setBounds(0,0, 225, 50);
+                aardappelPanel.setBackground(new Color(94, 163, 226));
+                aardappelPanel.add(aardappelKnop);
+
+                JPanel maisPanel = new JPanel();
+                maisPanel.setBounds(225,0,275,50);
+                maisPanel.setBackground(new Color(94, 163, 226));
+                maisPanel.add(maisKnop);
+
+                JPanel tarwePanel = new JPanel();
+                tarwePanel.setBounds(0,50,225,50);
+                tarwePanel.setBackground(new Color(94, 163, 226));
+                tarwePanel.add(tarweKnop);
+
+                JPanel wortelPanel = new JPanel();
+                wortelPanel.setBounds(225,50,275,50);
+                wortelPanel.setBackground(new Color(94, 163, 226));
+                wortelPanel.add(wortelKnop);
+
+                JPanel ijsbergslaPanel =new JPanel();
+                ijsbergslaPanel.setBounds(0,100, 225, 50);
+                ijsbergslaPanel.setBackground(new Color(94, 163, 226));
+                ijsbergslaPanel.add(ijsbergslaKnop);
+
+                JPanel andersPanel = new JPanel();
+                andersPanel.setBounds(225,100,275,50);
+                andersPanel.setBackground(new Color(94, 163, 226));
+                andersPanel.add(andersLabel);
+                andersPanel.add(andersField);
+                andersPanel.add(andersKnop);
+
+                JFrame frame = new JFrame();
+                frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+                frame.setLayout(null);
+                frame.setSize(500, 180);
+                frame.setResizable(false);
+                frame.setTitle("Gewassen");
+                frame.setVisible(true);
+                frame.add(aardappelPanel);
+                frame.add(maisPanel);
+                frame.add(tarwePanel);
+                frame.add(wortelPanel);
+                frame.add(ijsbergslaPanel);
+                frame.add(andersPanel);
+
+
+
+                aardappelKnop.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        JOptionPane.showMessageDialog(null, "AquaSjoerd staat geconfigureerd op het irrigeren van het gewas: aardappel");
+                    }
+                });
+
+                maisKnop.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        JOptionPane.showMessageDialog(null, "AquaSjoerd staat geconfigureerd op het irrigeren van het gewas: mais");
+                    }
+                });
+
+                tarweKnop.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        JOptionPane.showMessageDialog(null, "AquaSjoerd staat geconfigureerd op het irrigeren van het gewas: tarwe");
+                    }
+                });
+
+                wortelKnop.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        JOptionPane.showMessageDialog(null, "AquaSjoerd staat geconfigureerd op het irrigeren van het gewas: wortel");
+                    }
+                });
+
+                ijsbergslaKnop.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        JOptionPane.showMessageDialog(null, "AquaSjoerd staat geconfigureerd op het irrigeren van het gewas: ijsbergsla");
+                    }
+                });
+
+                andersKnop.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        JOptionPane.showMessageDialog(null, "AquaSjoerd staat geconfigureerd op het irrigeren op een gewas dat niet in het standaard configuratie is beschreven.\n" +
+                                "Om dit gewas toe te voegen moet u dit gewas eerst handmatig configureren.\n" +
+                                "Voor toekomstige toepassing van deze configuratie kunt u hem opslaan.");
+
+                        String [] irrigatieArray = {"Weinig (1 keer)", "Gemiddeld (3 keer)", "Vaak (5 keer)"};
+                        JComboBox irrigatieBox = new JComboBox(irrigatieArray);
+
+                        JLabel hoevaak = new JLabel();
+                        hoevaak.setText("Hoe vaak wilt u AquaSjoerd laten irrigeren?");
+
+                        JPanel invoerPanel = new JPanel();
+                        invoerPanel.setBounds(10,100,250,50);
+                        invoerPanel.add(irrigatieBox);
+
+                        JPanel hoevaakTextVak = new JPanel();
+                        hoevaakTextVak.setBounds(10,0,250, 25);
+                        hoevaakTextVak.add(hoevaak);
+
+
+
+                        JFrame andersFrame = new JFrame("Registratie nieuw gewas");
+                        andersFrame.setSize(500,200);
+                        andersFrame.setResizable(false);
+                        andersFrame.setVisible(true);
+                        andersFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+                        andersFrame.add(hoevaakTextVak);
+                        andersFrame.add(invoerPanel);
+                        frame.setVisible(false);
+
+
+                    }
+                });
+
+            }
+        });
     }
 
 
@@ -1021,7 +1179,7 @@ public class DeGaatGoed {
         beginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         beginFrame.pack();
         beginFrame.setSize(700, 400);
-        beginFrame.setResizable(true);
+
         beginFrame.setVisible(true);
         beginFrame.setResizable(false);
     }
