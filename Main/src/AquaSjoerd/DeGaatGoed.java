@@ -16,6 +16,7 @@ import javax.swing.BorderFactory;
 import javax.swing.border.Border;
 import javax.swing.ImageIcon;
 import javax.swing.plaf.ColorUIResource;
+import javax.swing.plaf.IconUIResource;
 import java.net.URL;
 public class DeGaatGoed {
     private JButton instellingenButton;
@@ -35,20 +36,30 @@ public class DeGaatGoed {
     double opgeslagenWaterGebruikPerUur;
     double inhoudBak = 44.0;
     double overigeInhoudBak;
+    int oudWaterMaand;
     double vorigeAantalLiters;
     JFrame gekframe = new JFrame();
+    int intinhoud = 44;
+    String andersNaam = "";
     String naam = "";
     String wachtwoord = "";
+    String andersKeren = "";
+    int volledigVol= 100;
     String adres = "";
     String stad = "";
     String postcode = "";
     String emailadress = "";
+    String aantalAndersKeren;
+    int aantalGeirrigeerd = 5;
     int abonnementsDuur = 7;
     JFrame frameStatistieken = new JFrame();
     JFrame beginFrame = new JFrame("AquaSjoerd");
     int getalNul = 0;
     int verlengingTeller = 0;
     int registratieTeller =0;
+    int andersNummer;
+    int hebNodig;
+    int ookNodig;
 
 
     public DeGaatGoed() {
@@ -115,6 +126,7 @@ public class DeGaatGoed {
 
                         while (resultSet.next()) {
 
+
                             waterGebruikPerUur = (waterGebruikVandaag/24);
                             String kaas = String.format("%.2f", waterGebruikPerUur);
                             verbuikPerUur.setText("Water per uur verbruikt door druppel irrigatie: " + kaas + " L");
@@ -143,6 +155,7 @@ public class DeGaatGoed {
 
                         while (resultSet.next()) {
                             waterGebruikMaand = resultSet.getInt("Liters");
+                            hebNodig = resultSet.getInt("Liters");
                              String kaas = String.format("%.2f", waterGebruikMaand);
                             verbruik.setFont(new Font("Arial", Font.ITALIC,14));
                             verbruik.setText("Water gebruikt deze maand door de druppel irrigatie: " + kaas + " L ");
@@ -164,7 +177,7 @@ public class DeGaatGoed {
                             String kaas = String.format("%.2f", waterGebruikVandaag);
                            // waterGebruiktVandaag.setFont(new Font("Arial", Font.ITALIC,14));
                             waterGebruiktVandaag.setText("Water verbruikt aan druppel irrigatie vandaag: " + kaas + " L");
-
+                        oudWaterMaand = resultSet.getInt("Liters");
                         }
 
                     } catch (SQLException a) {
@@ -216,53 +229,79 @@ public class DeGaatGoed {
                     refreshKnop.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
+
                             try {
+
                                 Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/irrigatie", "root", "Rinnegan999!");
                                 Statement statement = connection.createStatement();
                                 ResultSet resultSet = statement.executeQuery("SELECT * FROM irrigatie.hoeveelheden;");
 
                                 while (resultSet.next()) {
-                                    waterGebruikMaand= resultSet.getInt("Liters");
-                                    overigeInhoudBak = inhoudBak - waterGebruikMaand;
-                                    waterGebruikVandaag = waterGebruikMaand /30;
-                                    frameStatistieken.setVisible(false);
+
+                                    overigeInhoudBak = inhoudBak - waterGebruikMaand - oudWaterMaand;
+                                    waarde.setText(overigeInhoudBak + "L /" +inhoudBak+"L");
+
                                 }
 
                             } catch (SQLException a) {
                                 System.out.println("Error in de database");
                             }
-                            JOptionPane.showMessageDialog(null, "De statistieken zijn vernieuwd!");
-                        frameStatistieken.setVisible(true);
                         }
                     });
 
 
-//                    JPanel refreshPanel = new JPanel();
-//                    refreshPanel.setBounds(550, 340, 150, 60);
-//                    refreshPanel.setBackground(new Color(94, 163, 226));
-//                    refreshPanel.add(refreshKnop);
-//                    refreshPanel.setBorder(border);
+                    JPanel refreshPanel = new JPanel();
+                    refreshPanel.setBounds(550, 125, 150, 275);
+                    refreshPanel.setBackground(new Color(94, 163, 226));
+
+                    refreshPanel.setBorder(border);
 
                     JPanel inhoudOver = new JPanel();
                     inhoudOver.setBorder(border);
-                    inhoudOver.setBounds(550, 50, 150, 350);
+                    inhoudOver.setBounds(550, 50, 150, 75);
                     inhoudOver.add(inhoud);
                     inhoudOver.add(waarde);
                     inhoudOver.setBackground(new Color(94, 163, 226));
                     inhoudOver.add(refreshKnop);
 
+
+                    JProgressBar bar = new JProgressBar(0,100);
+                    bar.setBounds(0,50,550,50);
+                    bar.setStringPainted(true);
+
+                    volledigVol = 0;
+                    bar.setValue(volledigVol);
+                    bar.setForeground(Color.BLUE);
+                    bar.setBackground(Color.BLACK);
+
+
+                    if (volledigVol == 0){
+                        bar.setString("De ton is leeg!");
+                    }
+
+                    JPanel progressBarPanel = new JPanel();
+                    progressBarPanel.setBounds(0,50,550,50);
+                    // progressBarPanel.setBackground(new Color(94, 163, 226));
+                    // progressBarPanel.add(border);
+                    progressBarPanel.add(bar);
+
+
+                    frameStatistieken.add(bar);
                     frameStatistieken.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
                     frameStatistieken.setLayout(null);
                     frameStatistieken.setSize(700, 400);
                     frameStatistieken.setResizable(false);
                     frameStatistieken.setTitle("Statistieken");
                     frameStatistieken.setVisible(true);
+                    frameStatistieken.add(inhoudOver);
+                    frameStatistieken.add(refreshPanel);
                     frameStatistieken.add(koppanel);
                     frameStatistieken.add(statistieken);
                     frameStatistieken.add(textVak);
-                    frameStatistieken.add(inhoudOver);
+                //    frameStatistieken.add(progressBarPanel);
                     frameStatistieken.add(plaatje);
-                   // frameStatistieken.add(refreshPanel);
+
+
                 } else {
                     JOptionPane.showMessageDialog(null, "Registreer u eerst voor het gebruik");
                 }
@@ -782,7 +821,7 @@ public class DeGaatGoed {
                                "\n" +
                                "Voor het claimen van de klantrechten is het vereist dat de cliënt hier een aanzoek voor doet. Dit kan via onze klantenservice.\n" +
                                "\n" +
-                               "De lengte van de persoonsgegevens bewaring, is een maand groter als de lengte van het abonnement.\n" +
+                               "De lengte van de persoonsgegevens bewaring, is een maand groter dan de lengte van het abonnement.\n" +
                                "\n" +
                                "Wij verwijderen uw persoonsgegevens na een maand dat uw abonnement is afgelopen, zodat u zich nog een maand kan bedenken voor verwijdering.\n" +
                                "\n" +
@@ -1079,10 +1118,33 @@ public class DeGaatGoed {
                 andersPanel.add(andersField);
                 andersPanel.add(andersKnop);
 
+                String [] eigenArray = {"Courgette", "Broccoli", "Sojabonen", "Yam"};
+                JComboBox keuzeBox = new JComboBox(eigenArray);
+
+
+
+                JPanel rarePanel = new JPanel();
+                rarePanel.setBounds(0,150,225,100);
+                rarePanel.setBackground(new Color(94, 163, 226));
+                rarePanel.add(keuzeBox);
+
+                JButton gebruikKnop = new JButton("Gebruik");
+                gebruikKnop.setFont(new Font("Arial", Font.ITALIC,14));
+
+                JPanel backgroundPanel = new JPanel();
+                backgroundPanel.setBounds(180,150,100,100);
+                backgroundPanel.setBackground(new Color(94, 163, 226));
+                backgroundPanel.add(gebruikKnop);
+
+                JPanel achtergrondKleur = new JPanel();
+                achtergrondKleur.setBounds(280,150,220,100);
+                achtergrondKleur.setBackground(new Color(94, 163, 226));
+
+
                 JFrame frame = new JFrame();
                 frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
                 frame.setLayout(null);
-                frame.setSize(500, 180);
+                frame.setSize(500, 250);
                 frame.setResizable(false);
                 frame.setTitle("Gewassen");
                 frame.setVisible(true);
@@ -1092,12 +1154,23 @@ public class DeGaatGoed {
                 frame.add(wortelPanel);
                 frame.add(ijsbergslaPanel);
                 frame.add(andersPanel);
+                frame.add(backgroundPanel);
+                frame.add(rarePanel);
+                frame.add(achtergrondKleur);
 
 
+                gebruikKnop.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        JOptionPane.showMessageDialog(null, "AquaSjoerd staat geconfigureerd op uw zelf gemaakte configuratie");
+                        frame.setVisible(false);
+                    }
+                });
 
                 aardappelKnop.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        frame.setVisible(false);
                         JOptionPane.showMessageDialog(null, "AquaSjoerd staat geconfigureerd op het irrigeren van het gewas: aardappel");
                     }
                 });
@@ -1105,6 +1178,7 @@ public class DeGaatGoed {
                 maisKnop.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        frame.setVisible(false);
                         JOptionPane.showMessageDialog(null, "AquaSjoerd staat geconfigureerd op het irrigeren van het gewas: mais");
                     }
                 });
@@ -1112,6 +1186,7 @@ public class DeGaatGoed {
                 tarweKnop.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        frame.setVisible(false);
                         JOptionPane.showMessageDialog(null, "AquaSjoerd staat geconfigureerd op het irrigeren van het gewas: tarwe");
                     }
                 });
@@ -1119,6 +1194,7 @@ public class DeGaatGoed {
                 wortelKnop.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        frame.setVisible(false);
                         JOptionPane.showMessageDialog(null, "AquaSjoerd staat geconfigureerd op het irrigeren van het gewas: wortel");
                     }
                 });
@@ -1133,36 +1209,85 @@ public class DeGaatGoed {
                 andersKnop.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+
+                        frame.setVisible(false);
+
                         JOptionPane.showMessageDialog(null, "AquaSjoerd staat geconfigureerd op het irrigeren op een gewas dat niet in het standaard configuratie is beschreven.\n" +
                                 "Om dit gewas toe te voegen moet u dit gewas eerst handmatig configureren.\n" +
                                 "Voor toekomstige toepassing van deze configuratie kunt u hem opslaan.");
 
-                        String [] irrigatieArray = {"Weinig (1 keer)", "Gemiddeld (3 keer)", "Vaak (5 keer)"};
+                        String [] irrigatieArray = {"Weinig (1 keer per dag)", "Gemiddeld (3 keer per dag)", "Vaak (5 keer per dag)"};
                         JComboBox irrigatieBox = new JComboBox(irrigatieArray);
+
+                        JButton submiteKnopje = new JButton();
+                        submiteKnopje.setText("Opslaan");
 
                         JLabel hoevaak = new JLabel();
                         hoevaak.setText("Hoe vaak wilt u AquaSjoerd laten irrigeren?");
 
-                        JPanel invoerPanel = new JPanel();
-                        invoerPanel.setBounds(10,100,250,50);
-                        invoerPanel.add(irrigatieBox);
+                        JPanel labelPanel = new JPanel();
+                        labelPanel.setBounds(10, 0, 300, 50);
+                        labelPanel.add(hoevaak);
 
-                        JPanel hoevaakTextVak = new JPanel();
-                        hoevaakTextVak.setBounds(10,0,250, 25);
-                        hoevaakTextVak.add(hoevaak);
-
-
-
-                        JFrame andersFrame = new JFrame("Registratie nieuw gewas");
-                        andersFrame.setSize(500,200);
-                        andersFrame.setResizable(false);
-                        andersFrame.setVisible(true);
-                        andersFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-                        andersFrame.add(hoevaakTextVak);
-                        andersFrame.add(invoerPanel);
-                        frame.setVisible(false);
+                        JPanel boxPanel = new JPanel();
+                        boxPanel.setBounds(0,50,350,50);
+                        boxPanel.add(irrigatieBox);
+                        boxPanel.add(submiteKnopje);
 
 
+                        andersNaam = andersField.getText();
+                        andersKeren = irrigatieBox.getSelectedItem().toString();
+
+
+
+                        if (andersKeren.equals(irrigatieArray[0])){
+                            aantalAndersKeren = "1";
+                        }
+                         if (andersKeren.equals(irrigatieArray[1])){
+                            aantalAndersKeren = "3";
+                        }
+                         if (andersKeren.equals(irrigatieArray[2])){
+                            aantalAndersKeren= "5";
+                        }
+
+                        try {
+                            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/configuratie", "root", "Rinnegan999!");
+                            Statement statement = connection.createStatement();
+                            ResultSet resultSet = statement.executeQuery("SELECT * FROM configuratie.anders;");
+
+
+                        while (resultSet.next()){
+
+                            andersNummer = resultSet.getInt("nummer");
+                            andersNummer++;
+
+                        }
+
+                            statement.executeUpdate("insert into anders values('"+andersNaam +"','" + andersNummer + "','"+ aantalAndersKeren + "')");
+
+                        } catch (SQLException a) {
+                            JOptionPane.showMessageDialog(null,"Error in de database");
+                        }
+
+
+
+                        JFrame aframe = new JFrame();
+                        aframe.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+                        aframe.setLayout(null);
+                        aframe.setSize(500, 180);
+                        aframe.setResizable(false);
+                        aframe.setTitle("Registratie nieuw gewas");
+                        aframe.setVisible(true);
+                        aframe.add(labelPanel);
+                        aframe.add(boxPanel);
+
+                        submiteKnopje.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                JOptionPane.showMessageDialog(null, "De configuratie is opgeslagen");
+                        aframe.setVisible(false);
+                            }
+                        });
                     }
                 });
 
