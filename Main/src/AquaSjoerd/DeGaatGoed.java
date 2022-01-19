@@ -18,6 +18,8 @@ import javax.swing.ImageIcon;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.IconUIResource;
 import java.net.URL;
+import com.fazecast.jSerialComm.*;
+
 public class DeGaatGoed {
     private JButton instellingenButton;
     private JButton homeButton;
@@ -30,17 +32,18 @@ public class DeGaatGoed {
     private JLabel tekst;
     double waterGebruikMaand;
     double waterGebruikVandaag;
+    String tekstGebruikMaand;
     double waterGebruikPerUur;
     double opgeslagenWaterGebruikPerMaand;
     double opgeslagenWaterGebruikVandaag;
     double opgeslagenWaterGebruikPerUur;
-    double inhoudBak = 44.0;
+    double inhoudBak = 22.0;
     double overigeInhoudBak;
     int oudWaterMaand;
     double vorigeAantalLiters;
     double geenResetLiters;
     JFrame gekframe = new JFrame();
-    int intinhoud = 44;
+    int intinhoud = 22;
     String andersNaam = "";
     String naam = "";
     String wachtwoord = "";
@@ -61,6 +64,15 @@ public class DeGaatGoed {
     int andersNummer;
     int hebNodig;
     int ookNodig;
+    public static int volume = 0;
+    public static int humidity = 0;
+    public static String temperatuur = "00.00";
+    public static int lichtintensiteit = 0;
+    public static int bodemvochtigheid = 0;
+    public static String pomp = "uit";
+    public static int counter = 0;
+    public static int totaleHoeveelheidIrrigatie =0;
+
 
 
     public DeGaatGoed() {
@@ -130,8 +142,8 @@ public class DeGaatGoed {
 
 
                             waterGebruikPerUur = (waterGebruikVandaag/24);
-                            String kaas = String.format("%.2f", waterGebruikPerUur);
-                            verbuikPerUur.setText("Water per uur verbruikt door druppel irrigatie: " + kaas + " L");
+                            String text = String.format("%.2f", waterGebruikPerUur);
+                            verbuikPerUur.setText("Water per uur verbruikt door druppel irrigatie: " + text + " L");
                         }
 
                     } catch (SQLException a) {
@@ -156,11 +168,11 @@ public class DeGaatGoed {
                         ResultSet resultSet = statement.executeQuery("SELECT * FROM irrigatie.hoeveelheden;");
 
                         while (resultSet.next()) {
-                            waterGebruikMaand = resultSet.getInt("Liters");
+                            waterGebruikMaand = inhoudBak - (DeGaatGoed.volume * inhoudBak /100);
                             hebNodig = resultSet.getInt("Liters");
-                             String kaas = String.format("%.2f", waterGebruikMaand);
+                            tekstGebruikMaand = String.format("%.2f", waterGebruikMaand);
                             verbruik.setFont(new Font("Arial", Font.ITALIC,14));
-                            verbruik.setText("Water gebruikt deze maand door de druppel irrigatie: " + kaas + " L ");
+                            verbruik.setText("Water gebruikt deze maand door de druppel irrigatie: " + tekstGebruikMaand + " L ");
 
                         }
 
@@ -210,7 +222,7 @@ public class DeGaatGoed {
                         ResultSet resultSet = statement.executeQuery("SELECT * FROM irrigatie.hoeveelheden;");
 
                         while (resultSet.next()) {
-                      overigeInhoudBak = inhoudBak - waterGebruikMaand;
+                      overigeInhoudBak = inhoudBak * DeGaatGoed.volume / 100;
                          waarde.setText(overigeInhoudBak + "L /" +inhoudBak+"L");
 
                         }
@@ -241,9 +253,22 @@ public class DeGaatGoed {
                         System.out.println("Error in de database");
                     }
 
+                    JProgressBar bar = new JProgressBar(0,100);
+                    bar.setBounds(0,50,525,50);
+                    bar.setStringPainted(true);
+                    bar.setValue(DeGaatGoed.volume);
+                    bar.setForeground(Color.BLUE);
+                    bar.setBackground(Color.BLACK);
+
                     refreshKnop.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
+
+
+                            bar.setValue(DeGaatGoed.volume);
+                            verbruik.setText("Water gebruikt deze maand door de druppel irrigatie: " + tekstGebruikMaand + " L ");
+
+
 
                             try {
 
@@ -253,7 +278,7 @@ public class DeGaatGoed {
 
                                 while (resultSet.next()) {
                                     geenResetLiters = resultSet.getInt("Liters");
-                                    overigeInhoudBak = inhoudBak - waterGebruikMaand - oudWaterMaand;
+                                    overigeInhoudBak = inhoudBak * DeGaatGoed.volume/100;
                                     waarde.setText(overigeInhoudBak + "L /" +inhoudBak+"L");
 
                                 }
@@ -264,36 +289,80 @@ public class DeGaatGoed {
                         }
                     });
 
+                    JLabel humidtyLabel = new JLabel();
+                    String humidityGeg = String.format("Luchtvochtigheid: %d %%", DeGaatGoed.humidity);
+                    humidtyLabel.setText(humidityGeg);
+
+                    JLabel temperatuurLabel = new JLabel();
+                    String temperatuurGeg = String.format("Temperatuur: %s C", DeGaatGoed.temperatuur);
+                    temperatuurLabel.setText(temperatuurGeg);
+
+                    JLabel lichtintensiteitLabel = new JLabel();
+                    String sterkte;
+                    if (DeGaatGoed.lichtintensiteit < 20 ){
+                        sterkte = "donker";
+                    } else if (DeGaatGoed.lichtintensiteit < 40){
+                        sterkte = "dim";
+                    } else if (DeGaatGoed.lichtintensiteit < 60){
+                        sterkte = "mid";
+                    } else if (DeGaatGoed.lichtintensiteit < 80){
+                        sterkte = "fel";
+                    } else {
+                        sterkte = "zeer fel";
+                    }
+                    String lichtintensiteitGeg = String.format("Lichtsterkte: %d (%s)", DeGaatGoed.lichtintensiteit, sterkte);
+                    lichtintensiteitLabel.setText(lichtintensiteitGeg);
+
+                    JLabel bodemLabel = new JLabel();
+                    String bodemString = String.format("Bodemvochtigheid: %d", DeGaatGoed.bodemvochtigheid);
+                    bodemLabel.setText(bodemString);
+
+                    JLabel pompStatusLabel = new JLabel();
+                    String pompStatusString = String.format("Pomp: %s", DeGaatGoed.pomp);
+                    pompStatusLabel.setText(pompStatusString);
+
+                    JLabel totaalGeirrigeerdLabel = new JLabel();
+                    String totaaleGeirrigeerdString = String.format("Totaal geïrrigeerd: %d L", DeGaatGoed.totaleHoeveelheidIrrigatie);
+                    totaalGeirrigeerdLabel.setText(totaaleGeirrigeerdString);
 
                     JPanel refreshPanel = new JPanel();
-                    refreshPanel.setBounds(550, 125, 150, 275);
+                    refreshPanel.setBounds(525, 125, 175, 275);
                     refreshPanel.setBackground(new Color(94, 163, 226));
-
                     refreshPanel.setBorder(border);
+                    refreshPanel.add(humidtyLabel);
+                    refreshPanel.add(temperatuurLabel);
+                    refreshPanel.add(lichtintensiteitLabel);
+                    refreshPanel.add(bodemLabel);
+                    refreshPanel.add(pompStatusLabel);
+                    refreshPanel.add(totaalGeirrigeerdLabel);
 
                     JPanel inhoudOver = new JPanel();
                     inhoudOver.setBorder(border);
-                    inhoudOver.setBounds(550, 50, 150, 75);
+                    inhoudOver.setBounds(525, 50, 175, 75);
                     inhoudOver.add(inhoud);
                     inhoudOver.add(waarde);
                     inhoudOver.setBackground(new Color(94, 163, 226));
                     inhoudOver.add(refreshKnop);
 
 
-                    JProgressBar bar = new JProgressBar(0,100);
-                    bar.setBounds(0,50,550,50);
-                    bar.setStringPainted(true);
-
-                    volledigVol = 0;
-                    double nodigheid = ((inhoudBak-geenResetLiters)/inhoudBak)*100;
-                    bar.setValue((int)nodigheid);
-                    bar.setForeground(Color.BLUE);
-                    bar.setBackground(Color.BLACK);
 
 
-                    if (nodigheid == 0){
-                        bar.setString("De ton is leeg!");
-                    }
+
+//                    volledigVol = 0;
+//                    double nodigheid = ((inhoudBak-geenResetLiters)/inhoudBak)*100;
+
+
+
+
+
+
+
+
+
+
+//                    if (nodigheid == 0){
+//                        bar.setString("De ton is leeg!");
+//                    }
 
                     JPanel progressBarPanel = new JPanel();
                     progressBarPanel.setBounds(0,50,550,50);
@@ -398,9 +467,11 @@ public class DeGaatGoed {
                     statistiekenKopje.setBackground(new Color(94, 163, 226));
                     statistiekenKopje.add(naamKopje);
 
+
                     JLabel statistiekenTekst = new JLabel();
                     if (opgeslagenWaterGebruikPerMaand > 0) {
-                        statistiekenTekst.setText("Water geïrrigeerd: " + opgeslagenWaterGebruikPerMaand + "L");
+                        String limiet = String.format("Water geÏrrigeerd: %.2f L", opgeslagenWaterGebruikPerMaand);
+                        statistiekenTekst.setText(limiet);
                     }
                     else {
                         statistiekenTekst.setText("Er is nog niks opgeslagen");
@@ -472,7 +543,7 @@ public class DeGaatGoed {
 
                                 while (resultSet.next()) {
                                     waterGebruikMaand = resultSet.getInt("Liters");
-                                    opgeslagenWaterGebruikPerMaand = waterGebruikMaand;
+                                    opgeslagenWaterGebruikPerMaand = inhoudBak - (inhoudBak * DeGaatGoed.volume/100);;
                                     opgeslagenWaterGebruikVandaag = opgeslagenWaterGebruikPerMaand/30;
 
                                 }
@@ -899,7 +970,7 @@ public class DeGaatGoed {
                     frame.setLayout(null);
                     frame.setSize(700, 400);
                     frame.setResizable(false);
-                    frame.setTitle("Abonnement");
+                    frame.setTitle("Persoonlijke Gegevens");
                     frame.setVisible(true);
                     frame.add(type);
                     frame.add(kop);
@@ -1295,16 +1366,17 @@ public class DeGaatGoed {
                         JPanel labelPanel = new JPanel();
                         labelPanel.setBounds(10, 0, 300, 50);
                         labelPanel.add(hoevaak);
+                        labelPanel.setBackground(new Color(94, 163, 226));
 
                         JPanel boxPanel = new JPanel();
                         boxPanel.setBounds(0,50,350,50);
                         boxPanel.add(irrigatieBox);
                         boxPanel.add(submiteKnopje);
+                        boxPanel.setBackground(new Color(94, 163, 226));
 
 
                         andersNaam = andersField.getText();
                         andersKeren = irrigatieBox.getSelectedItem().toString();
-
 
 
                         if (andersKeren.equals(irrigatieArray[0])){
@@ -1336,6 +1408,9 @@ public class DeGaatGoed {
                             JOptionPane.showMessageDialog(null,"Error in de database");
                         }
 
+                        JPanel achtergrondPaneel = new JPanel();
+                        achtergrondPaneel.setBounds(0,0,500,180);
+                        achtergrondPaneel.setBackground(new Color(94, 163, 226));
 
 
                         JFrame aframe = new JFrame();
@@ -1345,6 +1420,7 @@ public class DeGaatGoed {
                         aframe.setResizable(false);
                         aframe.setTitle("Registratie nieuw gewas");
                         aframe.setVisible(true);
+                        aframe.add(achtergrondPaneel);
                         aframe.add(labelPanel);
                         aframe.add(boxPanel);
 
@@ -1365,7 +1441,6 @@ public class DeGaatGoed {
 
     public static void main(String[] args) {
 
-
         JFrame beginFrame = new JFrame("AquaSjoerd");
         beginFrame.setContentPane(new DeGaatGoed().mainpanel);
         beginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -1374,6 +1449,72 @@ public class DeGaatGoed {
 
         beginFrame.setVisible(true);
         beginFrame.setResizable(false);
+
+
+        SerialPort[] ports = SerialPort.getCommPorts();
+        SerialPort arduino = ports[0];
+        for (SerialPort port : ports) {
+            if (port.toString().equals("Arduino Uno")) {
+                arduino = port;
+            }
+        }
+
+        arduino.openPort();
+        MessageListener listener = new MessageListener();
+        arduino.addDataListener(listener);
+
+    }
+}
+
+final class MessageListener implements SerialPortMessageListener {
+    @Override
+    public int getListeningEvents() { return SerialPort.LISTENING_EVENT_DATA_RECEIVED; }
+
+    @Override
+    public byte[] getMessageDelimiter() { return new byte[] { (byte)0x0A}; }
+
+    @Override
+    public boolean delimiterIndicatesEndOfMessage() { return true; }
+
+    @Override
+    public void serialEvent(SerialPortEvent event) {
+        byte[] delimitedMessage = event.getReceivedData();
+        String message = "";
+        for (byte b : delimitedMessage) {
+            message += (char) b;
+        }
+        System.out.print(message);
+        String[] variables = message.split(",");
+        for (String s : variables) {
+            System.out.println(s);
+        }
+        if (DeGaatGoed.counter > 0) {
+            DeGaatGoed.volume = Integer.parseInt(variables[0]);
+            DeGaatGoed.humidity = Integer.parseInt(variables[1]);
+            DeGaatGoed.temperatuur = variables[2];
+            DeGaatGoed.lichtintensiteit = Integer.parseInt(variables[3]);
+            DeGaatGoed.bodemvochtigheid = Integer.parseInt(variables[4]);
+            if (variables[5].equals("1")){
+                DeGaatGoed.pomp = "aan";
+            }
+            else {
+                DeGaatGoed.pomp = "uit";
+            }
+            Scanner scn = new Scanner(variables[6]);
+            DeGaatGoed.totaleHoeveelheidIrrigatie = scn.nextInt();
+
+
+            System.out.println("Volume: " + DeGaatGoed.volume);
+            System.out.println("Humidity: " + DeGaatGoed.humidity);
+            System.out.println("Temperature: " + DeGaatGoed.temperatuur);
+            System.out.println("Licht: " + DeGaatGoed.lichtintensiteit);
+            System.out.println("Bodem: " + DeGaatGoed.bodemvochtigheid);
+            System.out.println("pomp: " + DeGaatGoed.pomp);
+            System.out.println("totaal: " + DeGaatGoed.totaleHoeveelheidIrrigatie);
+        } else {
+            DeGaatGoed.counter++;
+        }
+
     }
 }
 //
