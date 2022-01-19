@@ -38,6 +38,7 @@ public class DeGaatGoed {
     double overigeInhoudBak;
     int oudWaterMaand;
     double vorigeAantalLiters;
+    double geenResetLiters;
     JFrame gekframe = new JFrame();
     int intinhoud = 44;
     String andersNaam = "";
@@ -89,6 +90,7 @@ public class DeGaatGoed {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!naam.equals("")) {
+
 
                     JLabel plaatje = new JLabel();
                     ImageIcon image = new ImageIcon(this.getClass().getResource("Afbeelding1.png"));
@@ -225,6 +227,19 @@ public class DeGaatGoed {
                     refreshKnop.setBackground(new Color(94, 163, 226));
                     refreshKnop.setBorder(border);
 
+                    try {
+
+                        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/irrigatie", "root", "Rinnegan999!");
+                        Statement statement = connection.createStatement();
+                        ResultSet resultSet = statement.executeQuery("SELECT * FROM irrigatie.hoeveelheden;");
+
+                        while (resultSet.next()) {
+                            geenResetLiters = resultSet.getInt("Liters");
+                        }
+
+                    } catch (SQLException a) {
+                        System.out.println("Error in de database");
+                    }
 
                     refreshKnop.addActionListener(new ActionListener() {
                         @Override
@@ -237,7 +252,7 @@ public class DeGaatGoed {
                                 ResultSet resultSet = statement.executeQuery("SELECT * FROM irrigatie.hoeveelheden;");
 
                                 while (resultSet.next()) {
-
+                                    geenResetLiters = resultSet.getInt("Liters");
                                     overigeInhoudBak = inhoudBak - waterGebruikMaand - oudWaterMaand;
                                     waarde.setText(overigeInhoudBak + "L /" +inhoudBak+"L");
 
@@ -270,19 +285,18 @@ public class DeGaatGoed {
                     bar.setStringPainted(true);
 
                     volledigVol = 0;
-                    bar.setValue(volledigVol);
+                    double nodigheid = ((inhoudBak-geenResetLiters)/inhoudBak)*100;
+                    bar.setValue((int)nodigheid);
                     bar.setForeground(Color.BLUE);
                     bar.setBackground(Color.BLACK);
 
 
-                    if (volledigVol == 0){
+                    if (nodigheid == 0){
                         bar.setString("De ton is leeg!");
                     }
 
                     JPanel progressBarPanel = new JPanel();
                     progressBarPanel.setBounds(0,50,550,50);
-                    // progressBarPanel.setBackground(new Color(94, 163, 226));
-                    // progressBarPanel.add(border);
                     progressBarPanel.add(bar);
 
 
@@ -385,7 +399,7 @@ public class DeGaatGoed {
                     statistiekenKopje.add(naamKopje);
 
                     JLabel statistiekenTekst = new JLabel();
-                    if (opgeslagenWaterGebruikPerMaand > -1) {
+                    if (opgeslagenWaterGebruikPerMaand > 0) {
                         statistiekenTekst.setText("Water geïrrigeerd: " + opgeslagenWaterGebruikPerMaand + "L");
                     }
                     else {
@@ -460,6 +474,7 @@ public class DeGaatGoed {
                                     waterGebruikMaand = resultSet.getInt("Liters");
                                     opgeslagenWaterGebruikPerMaand = waterGebruikMaand;
                                     opgeslagenWaterGebruikVandaag = opgeslagenWaterGebruikPerMaand/30;
+
                                 }
 
                             } catch (SQLException a) {
@@ -786,7 +801,7 @@ public class DeGaatGoed {
                     plaatje.setBounds(0, 0, 600, 416);
 
                     JButton contactInfo = new JButton();
-                    contactInfo.setText("Privacy beleid");
+                    contactInfo.setText("Privacy beleid ");
                     contactInfo.setFont(new Font("Arial", Font.PLAIN, 10));
 
                     contactInfo.addActionListener(new ActionListener() {
@@ -1035,16 +1050,6 @@ public class DeGaatGoed {
                         JOptionPane.showMessageDialog(null, "Bedankt voor uw registratie " + naam);
                         inlogFrame.show(false);
 
-                        try {
-                            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/klantendatabaseaquasjoerd", "root", "Rinnegan999!");
-                            Statement statement = connection.createStatement();
-                            ResultSet resultSet = statement.executeQuery("select * from klantendatabaseaquasjoerd.klant");
-                            statement.executeUpdate("insert into klant values('"+naam +"','" + adres + "','"+ stad + "','" + emailadress + "','"+ wachtwoord + "','" + postcode + "')");
-
-                        }
-                        catch (SQLException a){
-                            JOptionPane.showMessageDialog(null, "Error in de invoer, probeer het nog een keer");
-                        }
 
                     }
                 });
@@ -1076,7 +1081,6 @@ public class DeGaatGoed {
                 JButton tarweKnop = new JButton();
                 tarweKnop.setText("   Tarwe   ");
                 tarweKnop.setFont(new Font("Arial", Font.ITALIC,14));
-
 
                 JButton maisKnop = new JButton();
                 maisKnop.setText("     Mais     ");
@@ -1164,6 +1168,7 @@ public class DeGaatGoed {
                     public void actionPerformed(ActionEvent e) {
                         JOptionPane.showMessageDialog(null, "AquaSjoerd staat geconfigureerd op uw zelf gemaakte configuratie");
                         frame.setVisible(false);
+
                     }
                 });
 
@@ -1171,6 +1176,15 @@ public class DeGaatGoed {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         frame.setVisible(false);
+                        try {
+                            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/configuratie", "root", "Rinnegan999!");
+                            Statement statement = connection.createStatement();
+                            ResultSet resultSet = statement.executeQuery("select * from configuratie.anders");
+                            statement.executeUpdate("insert into configuratie.anders values('aardappel','1','2')");
+                        }
+                        catch (SQLException a){
+                            JOptionPane.showMessageDialog(null, "Error in de invoer, probeer het nog een keer");
+                        }
                         JOptionPane.showMessageDialog(null, "AquaSjoerd staat geconfigureerd op het irrigeren van het gewas: aardappel");
                     }
                 });
@@ -1179,6 +1193,20 @@ public class DeGaatGoed {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         frame.setVisible(false);
+
+                        try {
+                            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/configuratie", "root", "Rinnegan999!");
+                            Statement statement = connection.createStatement();
+                            ResultSet resultSet = statement.executeQuery("select * from configuratie.anders");
+                            statement.executeUpdate("insert into configuratie.anders values('mais','2','2')");
+                        }
+                        catch (SQLException a){
+                            JOptionPane.showMessageDialog(null, "Error in de invoer, probeer het nog een keer");
+                        }
+
+
+
+
                         JOptionPane.showMessageDialog(null, "AquaSjoerd staat geconfigureerd op het irrigeren van het gewas: mais");
                     }
                 });
@@ -1187,6 +1215,19 @@ public class DeGaatGoed {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         frame.setVisible(false);
+
+                        try {
+                            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/configuratie", "root", "Rinnegan999!");
+                            Statement statement = connection.createStatement();
+                            ResultSet resultSet = statement.executeQuery("select * from configuratie.anders");
+                            statement.executeUpdate("insert into configuratie.anders values('tarwe','3','1')");
+                        }
+                        catch (SQLException a){
+                            JOptionPane.showMessageDialog(null, "Error in de invoer, probeer het nog een keer");
+                        }
+
+
+
                         JOptionPane.showMessageDialog(null, "AquaSjoerd staat geconfigureerd op het irrigeren van het gewas: tarwe");
                     }
                 });
@@ -1194,6 +1235,20 @@ public class DeGaatGoed {
                 wortelKnop.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+
+                        try {
+                            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/configuratie", "root", "Rinnegan999!");
+                            Statement statement = connection.createStatement();
+                            ResultSet resultSet = statement.executeQuery("select * from configuratie.anders");
+                            statement.executeUpdate("insert into configuratie.anders values('wortel','4','2')");
+                        }
+                        catch (SQLException a){
+                            JOptionPane.showMessageDialog(null, "Error in de invoer, probeer het nog een keer");
+                        }
+
+
+
+
                         frame.setVisible(false);
                         JOptionPane.showMessageDialog(null, "AquaSjoerd staat geconfigureerd op het irrigeren van het gewas: wortel");
                     }
@@ -1202,6 +1257,18 @@ public class DeGaatGoed {
                 ijsbergslaKnop.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+
+                        try {
+                            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/configuratie", "root", "Rinnegan999!");
+                            Statement statement = connection.createStatement();
+                            ResultSet resultSet = statement.executeQuery("select * from configuratie.anders");
+                            statement.executeUpdate("insert into configuratie.anders values('ijsbergsla','5','1')");
+                        }
+                        catch (SQLException a){
+                            JOptionPane.showMessageDialog(null, "Error in de invoer, probeer het nog een keer");
+                        }
+
+                        frame.setVisible(false);
                         JOptionPane.showMessageDialog(null, "AquaSjoerd staat geconfigureerd op het irrigeren van het gewas: ijsbergsla");
                     }
                 });
